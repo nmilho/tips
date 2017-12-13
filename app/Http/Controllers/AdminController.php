@@ -7,6 +7,8 @@ use App\Sport;
 use App\Season;
 use App\Competitor;
 use App\Category;
+use App\Tournament;
+use App\Match;
 
 class AdminController extends Controller
 {
@@ -51,6 +53,9 @@ class AdminController extends Controller
             $category = new Category();
             $category->saveCategory($match['tournament']['category']);
 
+            $tournament = new Tournament();
+            $tournament->saveTournament($match['tournament']);
+
             $season = new Season();
             $season->saveSeason($match['season']);
 
@@ -58,6 +63,16 @@ class AdminController extends Controller
             $competitor->saveCompetitor($match['competitors'][0]);
             $competitor = new Competitor();
             $competitor->saveCompetitor($match['competitors'][1]);
+
+            $_match = new Match();
+            $_match->id = $match['id'];
+            $_match->scheduled = $match['scheduled'];
+            $_match->season = $match['season']['id'];
+            $_match->tournament = $match['tournament']['id'];
+            $_match->competitorh = $match['competitors'][0]['id'];
+            $_match->competitora = $match['competitors'][1]['id'];
+
+            $_match->saveMatch($_match);
         }
 
         return dd($matches);
