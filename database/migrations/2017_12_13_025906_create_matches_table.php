@@ -20,8 +20,7 @@ class CreateMatchesTable extends Migration
             $table->string('season');
             $table->string('tournament');
             $table->string('competitorh');
-            $table->string('competitora');
-            
+            $table->string('competitora');            
             $table->timestamps();
 
             $table->foreign('season')->references('id')->on('seasons');

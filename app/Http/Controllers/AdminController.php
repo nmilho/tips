@@ -64,18 +64,17 @@ class AdminController extends Controller
             $competitor = new Competitor();
             $competitor->saveCompetitor($match['competitors'][1]);
 
-            $_match = new Match();
-            $_match->id = $match['id'];
-            $_match->scheduled = $match['scheduled'];
-            $_match->season = $match['season']['id'];
-            $_match->tournament = $match['tournament']['id'];
-            $_match->competitorh = $match['competitors'][0]['id'];
-            $_match->competitora = $match['competitors'][1]['id'];
+            $data = array('id'=>$match['id'], 'scheduled'=>$match['scheduled'], 'season'=>$match['season']['id'], 
+                        'tournament'=>$match['tournament']['id'], 'competitorh'=>$match['competitors'][0]['id'],
+                        'competitora'=>$match['competitors'][1]['id']);
 
-            $_match->saveMatch($_match);
+
+            $_match = Match::updateOrCreate($data);
         }
 
-        return dd($matches);
+        //TODO::return view with last store summary
+
+
         //return View('tournaments', [ 'tournaments' => $tournaments ]);
         //return View('tournaments');
     }
