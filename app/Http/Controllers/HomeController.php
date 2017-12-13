@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Sport;
+use App\Season;
+use App\Competitor;
+use App\Category;
 
 class HomeController extends Controller
 {
@@ -25,4 +29,5 @@ class HomeController extends Controller
     {
         return view('home');
     }
+
 }
