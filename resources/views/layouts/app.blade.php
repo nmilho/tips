@@ -36,7 +36,13 @@
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
                     <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav">
+                        @guest
                         &nbsp;
+                        @else
+                            @if(Auth::user()->name == 'admin')
+                            <li><a href="{{ route('admin.matchesupdate') }}">Matches</a></li>
+                            @endif
+                        @endguest
                     </ul>
 
                     <!-- Right Side Of Navbar -->

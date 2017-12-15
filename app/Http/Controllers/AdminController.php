@@ -32,13 +32,39 @@ class AdminController extends Controller
     }
 
     /**
+     * Show the form to update matches
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function matchesupdate()
+    {
+
+        $date = now()->format('Y-m-d');
+
+        $jsonurl = 'https://api.sportradar.us/soccer-xt3/eu/en/schedules/'.$date.'/schedule.json?api_key='.env('SPORTRADAR_KEY');
+
+        $jsondata = file_get_contents($jsonurl);
+        $json = json_decode(utf8_decode($jsondata), true);
+        $matches = $json['sport_events'];
+
+
+
+        return view('admin.matchesupdate', ['date' => now()->format('d M (D)'), 'matches' => $matches]);
+    }
+
+    /**
      * Display a listing of sports.
      *
      * @return \Illuminate\Http\Response
      */
     public function store()
     {
-        $jsondata = file_get_contents('https://api.sportradar.us/soccer-xt3/eu/en/schedules/2017-12-14/schedule.json?api_key='.env('SPORTRADAR_KEY'));
+        $date = now()->format('Y-m-d');
+        $jsonurl = 'https://api.sportradar.us/soccer-xt3/eu/en/schedules/'.$date.'/schedule.json?api_key='.env('SPORTRADAR_KEY');
+
+        return redirect($jsonurl);
+
+        $jsondata = file_get_contents($jsonurl);
         $json = json_decode(utf8_decode($jsondata), true);
         $matches = $json['sport_events'];
         
