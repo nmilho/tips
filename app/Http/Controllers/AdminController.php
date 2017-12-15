@@ -36,10 +36,13 @@ class AdminController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function matchesupdate()
+    public function matchesupdate(Request $request)
     {
-
         $date = now()->format('Y-m-d');
+
+        if($request->input('scheduledate'))
+            $date = $request->input('scheduledate');
+
 
         $jsonurl = 'https://api.sportradar.us/soccer-xt3/eu/en/schedules/'.$date.'/schedule.json?api_key='.env('SPORTRADAR_KEY');
 
@@ -47,9 +50,9 @@ class AdminController extends Controller
         $json = json_decode(utf8_decode($jsondata), true);
         $matches = $json['sport_events'];
 
+        $tdate = \DateTime::createFromFormat('Y-m-d', $date)->format('d M (D)');
 
-
-        return view('admin.matchesupdate', ['date' => now()->format('d M (D)'), 'matches' => $matches]);
+        return view('admin.matchesupdate', ['date' => $tdate, 'matches' => $matches, 'scheduledate' => $date]);
     }
 
     /**
