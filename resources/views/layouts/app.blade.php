@@ -40,6 +40,7 @@
                         &nbsp;
                         @else
                             @if(Auth::user()->name == 'admin')
+                            <li><a href="{{ route('admin.sports') }}">Sports</a></li>
                             <li><a href="{{ route('admin.matchesupdate') }}">Matches</a></li>
                             @endif
                         @endguest

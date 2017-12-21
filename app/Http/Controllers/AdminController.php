@@ -28,7 +28,29 @@ class AdminController extends Controller
      */
     public function index()
     {
-        return view('admin');
+        return view('admin.admin');
+    }
+
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function sports(Request $request)
+    {
+        $date = now()->format('Y-m-d');
+
+        if($request->input('date'))
+            $date = $request->input('date');
+
+        $jsonurl = 'https://api.sportradar.us/soccer-xt3/eu/en/schedules/'.$date.'/schedule.json?api_key='.env('SPORTRADAR_KEY_EU');
+
+
+        $jsondata = file_get_contents($jsonurl);
+        $json = json_decode(utf8_decode($jsondata), true);
+        $sports = $json['sport_events'];
+
+        return view('admin.sportslist', ['date' => $date, 'sports' => $sports]);
     }
 
     /**
@@ -44,7 +66,7 @@ class AdminController extends Controller
             $date = $request->input('scheduledate');
 
 
-        $jsonurl = 'https://api.sportradar.us/soccer-xt3/eu/en/schedules/'.$date.'/schedule.json?api_key='.env('SPORTRADAR_KEY');
+        $jsonurl = 'https://api.sportradar.us/soccer-xt3/eu/en/schedules/'.$date.'/schedule.json?api_key='.env('SPORTRADAR_KEY_EU');
 
         $jsondata = file_get_contents($jsonurl);
         $json = json_decode(utf8_decode($jsondata), true);

@@ -20,4 +20,7 @@ Route::prefix('admin')->group(function() {
   Route::get('/', 'AdminController@index')->name('admin.dashboard');
   Route::post('/matches/update', 'AdminController@matchesupdate')->name('admin.matchesupdate');
   Route::get('/matches/update', 'AdminController@matchesupdate')->name('admin.matchesupdate');
+  Route::post('/sports/update', 'AdminController@sportsupdate')->name('admin.sportsupdate');
+  Route::get('/sports', 'AdminController@sports')->name('admin.sports');
+  Route::post('/sports', 'AdminController@sports')->name('admin.sports');
 });

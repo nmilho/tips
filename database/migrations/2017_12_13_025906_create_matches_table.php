@@ -14,7 +14,7 @@ class CreateMatchesTable extends Migration
     public function up()
     {
         Schema::create('matches', function (Blueprint $table) {
-            $table->string('id')->unique();
+            $table->string('id')->unique()->unsigned();
             $table->primary('id');
             $table->string('scheduled');
             $table->string('season');
