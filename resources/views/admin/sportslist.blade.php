@@ -26,21 +26,25 @@
 	                   	<input type="hidden" name="_token" value="{{ csrf_token() }}">  
 	                   
 	                   	<div class="form-group">  <!-- Checkbox Group !-->
-							<label class="control-label">Choose sports to update</label>
+							<label class="control-label" style="display: block; text-align: left;">Choose sports to update</label>
 							<?php $old = ''; ?>
 							@foreach($sports as $sport)
-							<?php $id = explode(':', $sport['tournament']['sport']['id'])[2] ?>
-							@if(array_has(str_split($old), $id))
-							<div class="checkbox">
-						  		<label>
-									<input type="checkbox" name="{{$sport['tournament']['sport']['id']}}" value="{{ $id }}">
-									{{$sport['tournament']['sport']['name']}}
-							  	</label>
-							</div>
-							<?php  $old .= ',' . $id; ?>
-							@endif
+								<?php $id = explode(':', $sport['id'])[2]; ?>
+								<div class="col-md-2">
+									<div class="checkbox">
+								  		<label>
+											<input type="checkbox" name="sportschk[{{ $id }}]" value="{{$sport['name']}}">
+											{{$sport['name']}} <i class="fa fa-new"></i>
+									  	</label>
+									</div>
+								</div>
+								<?php  $old .= ',' . $id; ?>
 							@endforeach
 						</div>	
+
+						<div class="col-md-2">
+                           	<button type="submit" class="btn btn-primary">Submit</button>
+                       	</div>
 	                   
 	               	</form>
 
