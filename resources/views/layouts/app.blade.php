@@ -51,6 +51,11 @@
                                             Sports
                                         </a>
                                     </li>
+                                    <li>
+                                        <a href="{{ route('admin.categories') }}">
+                                            Categories
+                                        </a>
+                                    </li>
                                 </ul>
                             </li>
 

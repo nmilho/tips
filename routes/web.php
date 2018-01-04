@@ -22,5 +22,6 @@ Route::prefix('admin')->group(function() {
   Route::get('/matches/update', 'AdminController@matchesupdate')->name('admin.matchesupdate');
   Route::post('/sports/update', 'AdminController@sportsupdate')->name('admin.sportsupdate');
   Route::get('/sports', 'AdminController@sports')->name('admin.sports');
-  Route::post('/sports', 'AdminController@sports')->name('admin.sports');
+  Route::post('/categories/update', 'AdminController@categoriesupdate')->name('admin.categoriesupdate');
+  Route::get('/categories', 'AdminController@categories')->name('admin.categories');
 });

@@ -70,6 +70,44 @@ class AdminController extends Controller
     }
 
     /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function categories(Request $request)
+    {
+        //$jsonurl = 'https://api.sportradar.us/soccer-xt3/eu/en/schedules/'.$date.'/schedule.json?api_key='.env('SPORTRADAR_KEY_EU');
+        $jsonurl = 'https://api.sportradar.us/oddscomparison-rowt1/pt/eu/categories.json?api_key='.env('SPORTRADAR_KEY_ODD_ROW');
+
+
+        $jsondata = file_get_contents($jsonurl);
+        $json = json_decode(utf8_decode($jsondata), true);
+        $categories = $json['categories'];
+
+        return view('admin.categorieslist', ['dbcats' => Category::All(), 'cats' => $categories]);
+    }
+
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function categoriesupdate(Request $request)
+    {
+        //return dd($request->sportschk);
+
+        if($request)
+        {
+            foreach($request->catschk as $key=>$value)
+            {
+                Category::updateOrCreate( ['id' => $key, 'name' => $value] );
+            }
+        }
+
+        return redirect()->route('admin.categories');
+    }
+
+    /**
      * Show the form to update matches
      *
      * @return \Illuminate\Http\Response
