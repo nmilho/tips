@@ -7,18 +7,26 @@
             <div class="col-md-12">
         		<div class="filters">
         			
-        			<div class="panel panel-default">
-	                    <div class="panel-heading">Categories saved on DB</div>
-							
-						<div class="panel-body">
-							<ul>
-								@foreach($dbcats as $dbcat)
-								<li class="col-md-2">{{ $dbcat->name }}</li>
-								@endforeach
-							</ul>
-						</div>
-					</div>
+        			<form class="form-horizontal" method="POST" action="{{ route('admin.categories') }}">
 
+	                   	<input type="hidden" name="_token" value="{{ csrf_token() }}">  
+	                   
+	                   	<div class="form-group">
+	                   		<div class="col-md-8 col-md-offset-2">
+		                       	<label class="col-md-2 control-label">Sport</label>
+		                       	<div class="col-md-8">
+		                           	<select onchange="submit();" class="selectpicker form-control" title="sport" id="sportdd" name="sportdd">
+		                           		@foreach($sports as $sport)
+		                           		<option {{ $sportid == $sport->id ? "selected" : "" }} value="{{ $sport->id }}">{{ $sport->name }}</option>
+		                           		@endforeach
+		                           	</select>
+		                       	</div>
+		                    </div>
+	                   	</div>
+
+	               	</form>
+
+	               	@if(isset($cats))
 
         			<form class="form-horizontal" method="POST" action="{{ route('admin.categoriesupdate') }}">
 
@@ -46,6 +54,11 @@
                        	</div>
 	                   
 	               	</form>
+	               	@else
+
+	               	<p>No categories for this sport</p>
+
+	               	@endif
 
         		</div>
             	

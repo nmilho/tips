@@ -76,15 +76,21 @@ class AdminController extends Controller
      */
     public function categories(Request $request)
     {
-        //$jsonurl = 'https://api.sportradar.us/soccer-xt3/eu/en/schedules/'.$date.'/schedule.json?api_key='.env('SPORTRADAR_KEY_EU');
-        $jsonurl = 'https://api.sportradar.us/oddscomparison-rowt1/pt/eu/categories.json?api_key='.env('SPORTRADAR_KEY_ODD_ROW');
-
+        //return dd($request->sportdd);
+        $sportid = 1;
+        if($request->sportdd)
+        {
+            $sportid = $request->sportdd;
+        }
+        $jsonurl = 'https://api.sportradar.us/oddscomparison-rowt1/pt/eu/sports/sr:sport:'.$sportid.'/categories.json?api_key='.env('SPORTRADAR_KEY_ODD_ROW');            
 
         $jsondata = file_get_contents($jsonurl);
         $json = json_decode(utf8_decode($jsondata), true);
-        $categories = $json['categories'];
+        $categories = (isset($json['categories']) ? $json['categories'] : null);
 
-        return view('admin.categorieslist', ['dbcats' => Category::All(), 'cats' => $categories]);
+
+        $sports = Sport::All();
+        return view('admin.categorieslist', ['sports' => $sports, 'sportid' => $sportid, 'cats' => $categories]);
     }
 
     /**
