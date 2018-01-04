@@ -38,11 +38,6 @@ class AdminController extends Controller
      */
     public function sports(Request $request)
     {
-        $date = now()->format('Y-m-d');
-
-        if($request->input('date'))
-            $date = $request->input('date');
-
         //$jsonurl = 'https://api.sportradar.us/soccer-xt3/eu/en/schedules/'.$date.'/schedule.json?api_key='.env('SPORTRADAR_KEY_EU');
         $jsonurl = 'https://api.sportradar.us/oddscomparison-rowt1/en/eu/sports.json?api_key='.env('SPORTRADAR_KEY_ODD_ROW');
 
@@ -51,7 +46,7 @@ class AdminController extends Controller
         $json = json_decode(utf8_decode($jsondata), true);
         $sports = $json['sports'];
 
-        return view('admin.sportslist', ['date' => $date, 'sports' => $sports]);
+        return view('admin.sportslist', ['dbsports' => Sport::All(), 'sports' => $sports]);
     }
 
     /**

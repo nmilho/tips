@@ -6,20 +6,19 @@
         <div class="row">
             <div class="col-md-12">
         		<div class="filters">
-        			<form class="form-horizontal" method="POST" action="{{ route('admin.sports') }}">
+        			
+        			<div class="panel panel-default">
+	                    <div class="panel-heading">Sports saved on DB</div>
+							
+						<div class="panel-body">
+							<ul>
+								@foreach($dbsports as $dbsport)
+								<li class="col-md-2">{{ $dbsport->name }}</li>
+								@endforeach
+							</ul>
+						</div>
+					</div>
 
-	                   	<input type="hidden" name="_token" value="{{ csrf_token() }}">  
-	                   
-	                   	<div class="form-group">
-	                   		<div class="col-md-8 col-md-offset-2">
-		                       	<label class="col-md-2 control-label">Data</label>
-		                       	<div class="col-md-8">
-		                           	<input type="date" class="form-control" name="date" format="Y-m-d" value="{{ $date }}" onchange="this.form.submit();">
-		                       	</div>
-		                    </div>
-	                   	</div>
-	                   
-	               	</form>
 
         			<form class="form-horizontal" method="POST" action="{{ route('admin.sportsupdate') }}">
 
