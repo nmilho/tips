@@ -100,12 +100,19 @@ class AdminController extends Controller
      */
     public function categoriesupdate(Request $request)
     {
-        //return dd($request->sportschk);
+        //return dd($request->catschk);
 
         if($request)
         {
+            $jsonurl = 'https://api.sportradar.us/oddscomparison-rowt1/pt/eu/categories.json?api_key='.env('SPORTRADAR_KEY_ODD_ROW');            
+
+            $jsondata = file_get_contents($jsonurl);
+            $json = json_decode(utf8_decode($jsondata), true);
+            $categories = $json['categories'];
+
             foreach($request->catschk as $key=>$value)
             {
+                $cat = $categories['id']
                 Category::updateOrCreate( ['id' => $key, 'name' => $value] );
             }
         }

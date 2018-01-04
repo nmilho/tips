@@ -9,7 +9,7 @@
         			
         			<form class="form-horizontal" method="POST" action="{{ route('admin.categories') }}">
 
-	                   	<input type="hidden" name="_token" value="{{ csrf_token() }}">  
+	                   	<input type="hidden" name="_token" value="{{ csrf_token() }}">
 	                   
 	                   	<div class="form-group">
 	                   		<div class="col-md-8 col-md-offset-2">
@@ -40,7 +40,7 @@
 								<div class="col-md-2">
 									<div class="checkbox">
 								  		<label>
-											<input type="checkbox" name="catschk[{{ $id }}]" value="{{$cat['name']}}">
+											<input type="checkbox" name="catschk[{{ $id }}]" value="{{$cat['name']}}" >
 											{{$cat['name']}} <i class="fa fa-new"></i>
 									  	</label>
 									</div>
