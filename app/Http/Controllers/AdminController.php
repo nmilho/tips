@@ -21,6 +21,8 @@ class AdminController extends Controller
     {
         $this->middleware('auth:admin');
     }
+
+
     /**
      * Show the application dashboard.
      *
@@ -30,6 +32,7 @@ class AdminController extends Controller
     {
         return view('admin.admin');
     }
+
 
     /**
      * Show the application dashboard.
@@ -69,6 +72,8 @@ class AdminController extends Controller
         return redirect()->route('admin.sports');
     }
 
+
+
     /**
      * Show the application dashboard.
      *
@@ -90,7 +95,8 @@ class AdminController extends Controller
 
 
         $sports = Sport::All();
-        return view('admin.categorieslist', ['sports' => $sports, 'sportid' => $sportid, 'cats' => $categories, 'dbcats' => Category::All()]);
+        $sportname = Sport::find($sportid)->name;
+        return view('admin.categorieslist', ['sports' => $sports, 'sportid' => $sportid, 'sportname' => $sportname, 'cats' => $categories, 'dbcats' => Category::All()]);
     }
 
     /**
@@ -125,6 +131,8 @@ class AdminController extends Controller
 
         return redirect()->route('admin.categories');
     }
+
+
 
     /**
      * Show the form to update matches

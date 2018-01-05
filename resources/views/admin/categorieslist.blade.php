@@ -27,7 +27,7 @@
 	               	</form>
 
 	               	<div class="panel panel-default">
-	                    <div class="panel-heading">Sports saved on DB</div>
+	                    <div class="panel-heading">{{ $sportname }} Categories saved on DB</div>
 							
 						<div class="panel-body">
 							<ul>
