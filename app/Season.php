@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Season extends Model
 {
-    protected $fillable = ['id', 'name'];
+    protected $fillable = ['id', 'name', 'start_date', 'end_date', 'year'];
 
     public function saveSeason($data)
 	{

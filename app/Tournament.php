@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Tournament extends Model
 {
-    protected $fillable = ['id', 'name', 'sport', 'category'];
+    protected $fillable = ['id', 'name', 'sport_id', 'category_id', 'season_id'];
 
 
     public function saveTournament($data)

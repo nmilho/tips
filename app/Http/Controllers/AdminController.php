@@ -147,16 +147,16 @@ class AdminController extends Controller
         {
             $sportid = $request->sportdd;
         }
-        $jsonurl = 'https://api.sportradar.us/oddscomparison-rowt1/pt/eu/sports/sr:sport:'.$sportid.'/categories.json?api_key='.env('SPORTRADAR_KEY_ODD_ROW');            
+        $jsonurl = 'https://api.sportradar.us/oddscomparison-rowt1/pt/eu/sports/sr:sport:'.$sportid.'/tournaments.json?api_key='.env('SPORTRADAR_KEY_ODD_ROW');            
 
         $jsondata = file_get_contents($jsonurl);
         $json = json_decode(utf8_decode($jsondata), true);
-        $categories = (isset($json['categories']) ? $json['categories'] : null);
+        $tournaments = (isset($json['tournaments']) ? $json['tournaments'] : null);
 
 
         $sports = Sport::All();
         $sportname = Sport::find($sportid)->name;
-        return view('admin.tournamentslist', ['sports' => $sports, 'sportid' => $sportid, 'sportname' => $sportname, 'cats' => $categories, 'dbcats' => Category::All()]);
+        return view('admin.tournamentslist', ['sports' => $sports, 'sportid' => $sportid, 'sportname' => $sportname, 'tournaments' => $tournaments, 'dbtournaments' => Tournament::All()]);
     }
 
     /**
@@ -168,23 +168,51 @@ class AdminController extends Controller
     {
         if($request)
         {
-            $jsonurl = 'https://api.sportradar.us/oddscomparison-rowt1/pt/eu/categories.json?api_key='.env('SPORTRADAR_KEY_ODD_ROW');            
+            $jsonurl = 'https://api.sportradar.us/oddscomparison-rowt1/pt/eu/tournaments.json?api_key='.env('SPORTRADAR_KEY_ODD_ROW');            
 
             $jsondata = file_get_contents($jsonurl);
             $json = json_decode(utf8_decode($jsondata), true);
-            $categories = $json['categories'];
+            $tournaments = $json['tournaments'];
 
-            foreach($request->catschk as $key=>$value)
+            foreach($request->tournamentschk as $key=>$value)
             {
-                foreach($categories as $cat) {
-                    if(($cat['id'] == "sr:category:" . $key) && (!Category::find($key)) )
-                        Category::updateOrCreate([
-                            'id' => $key,
-                            'name' => $cat['name'],
-                            'country_code' => (isset($cat['country_code']) ? $cat['country_code']: ''),
-                            'outrights' => (isset($cat['outrights']) ? $cat['outrights']: ''),
-                            'sport_id' => $cat['sport_id']
+                foreach($tournaments as $tournament) {
+                    if(($tournament['id'] == "sr:tournament:" . $key) && (!Tournament::find($key)) )
+                    {
+                        $season_id = explode(':', $tournament['current_season']['id'])[2];
+
+                        if(!Season::find($season_id))
+                        {
+                            Season::updateOrCreate([
+                                'id' => $season_id,
+                                'name' => $tournament['current_season']['name'],
+                                'start_date' => $tournament['current_season']['start_date'],
+                                'end_date' => $tournament['current_season']['end_date'],
+                                'year' => $tournament['current_season']['year']
                             ]);
+                        }
+
+                        $category_id = explode(':', $tournament['category']['id'])[2];
+
+                        if(!Category::find($category_id))
+                        {
+                            Category::updateOrCreate([
+                                'id' => $category_id,
+                                'name' => $tournament['category']['name'],
+                                'country_code' => (isset($tournament['category']['country_code']) ? $tournament['category']['country_code']: ''),
+                                'outrights' => (isset($tournament['category']['outrights']) ? $tournament['category']['outrights']: false),
+                                'sport_id' => explode(':', $tournament['sport']['id'])[2]
+                            ]);
+                        }
+
+                        Tournament::updateOrCreate([
+                            'id' => $key,
+                            'name' => $tournament['name'],
+                            'sport_id' => explode(':', $tournament['sport']['id'])[2],
+                            'category_id' => explode(':', $tournament['category']['id'])[2],
+                            'season_id' => explode(':', $tournament['current_season']['id'])[2]
+                        ]);
+                    }
                 }
             }
         }
