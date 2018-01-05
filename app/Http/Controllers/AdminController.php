@@ -90,7 +90,7 @@ class AdminController extends Controller
 
 
         $sports = Sport::All();
-        return view('admin.categorieslist', ['sports' => $sports, 'sportid' => $sportid, 'cats' => $categories]);
+        return view('admin.categorieslist', ['sports' => $sports, 'sportid' => $sportid, 'cats' => $categories, 'dbcats' => Category::All()]);
     }
 
     /**
@@ -100,8 +100,6 @@ class AdminController extends Controller
      */
     public function categoriesupdate(Request $request)
     {
-        //return dd($request->catschk);
-
         if($request)
         {
             $jsonurl = 'https://api.sportradar.us/oddscomparison-rowt1/pt/eu/categories.json?api_key='.env('SPORTRADAR_KEY_ODD_ROW');            
@@ -112,8 +110,16 @@ class AdminController extends Controller
 
             foreach($request->catschk as $key=>$value)
             {
-                $cat = $categories['id']
-                Category::updateOrCreate( ['id' => $key, 'name' => $value] );
+                foreach($categories as $cat) {
+                    if(($cat['id'] == "sr:category:" . $key) && (!Category::find($key)) )
+                        Category::updateOrCreate([
+                            'id' => $key,
+                            'name' => $cat['name'],
+                            'country_code' => (isset($cat['country_code']) ? $cat['country_code']: ''),
+                            'outrights' => (isset($cat['outrights']) ? $cat['outrights']: ''),
+                            'sport_id' => $cat['sport_id']
+                            ]);
+                }
             }
         }
 

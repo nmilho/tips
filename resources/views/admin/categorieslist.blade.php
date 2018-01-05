@@ -26,6 +26,18 @@
 
 	               	</form>
 
+	               	<div class="panel panel-default">
+	                    <div class="panel-heading">Sports saved on DB</div>
+							
+						<div class="panel-body">
+							<ul>
+								@foreach($dbcats->where('sport_id', $sportid) as $dbcat)
+								<li class="col-md-2">{{ $dbcat->name }}</li>
+								@endforeach
+							</ul>
+						</div>
+					</div>
+
 	               	@if(isset($cats))
 
         			<form class="form-horizontal" method="POST" action="{{ route('admin.categoriesupdate') }}">
