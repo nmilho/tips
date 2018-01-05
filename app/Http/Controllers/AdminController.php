@@ -135,6 +135,66 @@ class AdminController extends Controller
 
 
     /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function tournaments(Request $request)
+    {
+        //return dd($request->sportdd);
+        $sportid = 1;
+        if($request->sportdd)
+        {
+            $sportid = $request->sportdd;
+        }
+        $jsonurl = 'https://api.sportradar.us/oddscomparison-rowt1/pt/eu/sports/sr:sport:'.$sportid.'/categories.json?api_key='.env('SPORTRADAR_KEY_ODD_ROW');            
+
+        $jsondata = file_get_contents($jsonurl);
+        $json = json_decode(utf8_decode($jsondata), true);
+        $categories = (isset($json['categories']) ? $json['categories'] : null);
+
+
+        $sports = Sport::All();
+        $sportname = Sport::find($sportid)->name;
+        return view('admin.tournamentslist', ['sports' => $sports, 'sportid' => $sportid, 'sportname' => $sportname, 'cats' => $categories, 'dbcats' => Category::All()]);
+    }
+
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function tournamentsupdate(Request $request)
+    {
+        if($request)
+        {
+            $jsonurl = 'https://api.sportradar.us/oddscomparison-rowt1/pt/eu/categories.json?api_key='.env('SPORTRADAR_KEY_ODD_ROW');            
+
+            $jsondata = file_get_contents($jsonurl);
+            $json = json_decode(utf8_decode($jsondata), true);
+            $categories = $json['categories'];
+
+            foreach($request->catschk as $key=>$value)
+            {
+                foreach($categories as $cat) {
+                    if(($cat['id'] == "sr:category:" . $key) && (!Category::find($key)) )
+                        Category::updateOrCreate([
+                            'id' => $key,
+                            'name' => $cat['name'],
+                            'country_code' => (isset($cat['country_code']) ? $cat['country_code']: ''),
+                            'outrights' => (isset($cat['outrights']) ? $cat['outrights']: ''),
+                            'sport_id' => $cat['sport_id']
+                            ]);
+                }
+            }
+        }
+
+        return redirect()->route('admin.tournaments');
+    }
+
+
+
+    /**
      * Show the form to update matches
      *
      * @return \Illuminate\Http\Response

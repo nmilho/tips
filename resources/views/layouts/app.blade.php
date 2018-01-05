@@ -56,10 +56,19 @@
                                             Categories
                                         </a>
                                     </li>
+                                    <li>
+                                        <a href="{{ route('admin.tournaments') }}">
+                                            Tournaments
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('admin.matchesupdate') }}">
+                                            Matches
+                                        </a>
+                                    </li>
                                 </ul>
                             </li>
 
-                            <li><a href="{{ route('admin.matchesupdate') }}">Matches</a></li>
                             @endif
                         @endguest
                     </ul>
