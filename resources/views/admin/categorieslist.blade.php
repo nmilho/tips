@@ -46,18 +46,16 @@
 	                   
 	                   	<div class="form-group">  <!-- Checkbox Group !-->
 							<label class="control-label" style="display: block; text-align: left;">Choose categories to update</label>
-							<?php $old = ''; ?>
 							@foreach($cats as $cat)
-								<?php $id = explode(':', $cat['id'])[2]; ?>
+								<?php $cat['id'] = ( (!strtok($cat['id'], ':').strtok(':')) ? strtok(':') : $cat['id'] ) ; ?>
 								<div class="col-md-2">
 									<div class="checkbox">
 								  		<label>
-											<input type="checkbox" name="catschk[{{ $id }}]" value="{{$cat['name']}}" >
+											<input type="checkbox" name="catschk[{{ $cat['id'] }}]" value="{{$cat['name']}}" >
 											{{$cat['name']}} <i class="fa fa-new"></i>
 									  	</label>
 									</div>
 								</div>
-								<?php  $old .= ',' . $id; ?>
 							@endforeach
 						</div>	
 

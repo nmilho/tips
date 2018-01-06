@@ -24,6 +24,19 @@
 		                    </div>
 	                   	</div>
 
+	                   	<div class="form-group">
+	                   		<div class="col-md-8 col-md-offset-2">
+		                       	<label class="col-md-2 control-label">Category</label>
+		                       	<div class="col-md-8">
+		                           	<select onchange="submit();" class="selectpicker form-control" title="category" id="categorydd" name="categorydd">
+		                           		@foreach($categories as $category)
+		                           		<option {{ $categoryid == $category->id ? "selected" : "" }} value="{{ $category->id }}">{{ $category->name }}</option>
+		                           		@endforeach
+		                           	</select>
+		                       	</div>
+		                    </div>
+	                   	</div>
+
 	               	</form>
 
 	               	<div class="panel panel-default">

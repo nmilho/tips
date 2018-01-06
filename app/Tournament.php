@@ -11,21 +11,28 @@ class Tournament extends Model
 
     public function saveTournament($data)
 	{
+		$data['id'] = ( (!strtok($data['id'], ':').strtok(':')) ? strtok(':') : $data['id'] ) ;
+        $data['sport_id'] = ( (!strtok($data['sport_id'], ':').strtok(':')) ? strtok(':') : $data['sport_id'] ) ;
+        $data['category_id'] = ( (!strtok($data['sport_id'], ':').strtok(':')) ? strtok(':') : $data['sport_id'] ) ;
+        $data['season_id'] = ( (!strtok($data['sport_id'], ':').strtok(':')) ? strtok(':') : $data['sport_id'] ) ;
+		
 		$tournament = Tournament::find($data['id']);
 
 		if($tournament == null)
 		{
 			$this->id = $data['id'];
 			$this->name = $data['name'];
-			$this->sport = $data['sport']['id'];
-			$this->category = $data['category']['id'];
+			$this->sport_id = $data['sport']['id'];
+			$this->category_id = $data['category']['id'];
+			$this->season_id = $data['current_season']['id'];
 			$result = $this->save();
 		}
 		else 
 		{
 			$tournament->name = $data['name'];
-			$tournament->sport = $data['sport']['id'];
-			$tournament->category = $data['category']['id'];
+			$tournament->sport_id = $data['sport']['id'];
+			$tournament->category_id = $data['category']['id'];
+			$tournament->season_id = $data['current_season']['id'];
 			$result = $tournament->save();
 		}
 

@@ -47,9 +47,16 @@ class AdminController extends Controller
 
         $jsondata = file_get_contents($jsonurl);
         $json = json_decode(utf8_decode($jsondata), true);
-        $sports = $json['sports'];
+        $sports = collect($json['sports']);
 
-        return view('admin.sportslist', ['dbsports' => Sport::All(), 'sports' => $sports]);
+        $dbsportsid =Sport::All()->pluck('id');
+        foreach($dbsportsid as $key => $value)
+            $dbsportsid[$key] = 'sr:sport:'.$value;
+
+        //return $dbsportsid;
+        $sportsfiltered = $sports->whereNotIn('id', $dbsportsid);
+
+        return view('admin.sportslist', ['dbsports' => Sport::All(), 'sports' => $sportsfiltered]);
     }
 
     /**
@@ -65,7 +72,8 @@ class AdminController extends Controller
         {
             foreach($request->sportschk as $key=>$value)
             {
-                Sport::updateOrCreate( ['id' => $key, 'name' => $value] );
+                $sport = new Sport;
+                $sport->saveSport( ['id' => $key, 'name' => $value] );
             }
         }
 
@@ -81,22 +89,30 @@ class AdminController extends Controller
      */
     public function categories(Request $request)
     {
-        //return dd($request->sportdd);
         $sportid = 1;
         if($request->sportdd)
         {
             $sportid = $request->sportdd;
         }
-        $jsonurl = 'https://api.sportradar.us/oddscomparison-rowt1/pt/eu/sports/sr:sport:'.$sportid.'/categories.json?api_key='.env('SPORTRADAR_KEY_ODD_ROW');            
+        $jsonurl = 'https://api.sportradar.us/oddscomparison-rowt1/en/eu/sports/sr:sport:'.$sportid.'/categories.json?api_key='.env('SPORTRADAR_KEY_ODD_ROW');            
 
         $jsondata = file_get_contents($jsonurl);
         $json = json_decode(utf8_decode($jsondata), true);
-        $categories = (isset($json['categories']) ? $json['categories'] : null);
+        $categories = collect((isset($json['categories']) ? $json['categories'] : null));
+
+        $dbcategoriesid = Category::All()->pluck('id');
+        foreach($dbcategoriesid as $key => $value)
+            $dbcategoriesid[$key] = 'sr:category:'.$value;
+
+        //return $dbsportsid;
+        $categoriesfiltered = $categories->whereNotIn('id', $dbcategoriesid);
+
 
 
         $sports = Sport::All();
-        $sportname = Sport::find($sportid)->name;
-        return view('admin.categorieslist', ['sports' => $sports, 'sportid' => $sportid, 'sportname' => $sportname, 'cats' => $categories, 'dbcats' => Category::All()]);
+        $sportname = $sports->where('id', $sportid)->pluck('name')->first();
+        
+        return view('admin.categorieslist', ['sports' => $sports, 'sportid' => $sportid, 'sportname' => $sportname, 'cats' => $categoriesfiltered, 'dbcats' => Category::All()]);
     }
 
     /**
@@ -108,24 +124,23 @@ class AdminController extends Controller
     {
         if($request)
         {
-            $jsonurl = 'https://api.sportradar.us/oddscomparison-rowt1/pt/eu/categories.json?api_key='.env('SPORTRADAR_KEY_ODD_ROW');            
+            $jsonurl = 'https://api.sportradar.us/oddscomparison-rowt1/en/eu/categories.json?api_key='.env('SPORTRADAR_KEY_ODD_ROW');            
 
             $jsondata = file_get_contents($jsonurl);
             $json = json_decode(utf8_decode($jsondata), true);
-            $categories = $json['categories'];
+            $categories = collect((isset($json['categories']) ? $json['categories'] : null));
 
-            foreach($request->catschk as $key=>$value)
+            $catschk = array_keys($request->catschk);
+            foreach($catschk as $key => $value)
+            $catschk[$key] = 'sr:category:'.$value;
+
+            $categoriesfiltered = $categories->whereIn('id', $catschk);
+            //return dd($categoriesfiltered);
+
+            foreach($categoriesfiltered as $category)
             {
-                foreach($categories as $cat) {
-                    if(($cat['id'] == "sr:category:" . $key) && (!Category::find($key)) )
-                        Category::updateOrCreate([
-                            'id' => $key,
-                            'name' => $cat['name'],
-                            'country_code' => (isset($cat['country_code']) ? $cat['country_code']: ''),
-                            'outrights' => (isset($cat['outrights']) ? $cat['outrights']: ''),
-                            'sport_id' => $cat['sport_id']
-                            ]);
-                }
+                $c = new Category;
+                $c->saveCategory($category);
             }
         }
 
@@ -141,22 +156,31 @@ class AdminController extends Controller
      */
     public function tournaments(Request $request)
     {
-        //return dd($request->sportdd);
-        $sportid = 1;
+        $sports = Sport::All()->sortBy('name');
+        $sportid = $sports->first()->id;
         if($request->sportdd)
         {
             $sportid = $request->sportdd;
         }
-        $jsonurl = 'https://api.sportradar.us/oddscomparison-rowt1/pt/eu/sports/sr:sport:'.$sportid.'/tournaments.json?api_key='.env('SPORTRADAR_KEY_ODD_ROW');            
+        $sportname = Sport::find($sportid)->name;
+
+        $categories = Category::All()->where('sport_id', $sportid);
+        $categoryid = $categories->first()->id;
+        if($request->categorydd)
+        {
+            $categoryid = $request->categorydd;
+        }
+        $categoryname = Category::find($categoryid)->name;
+
+        $jsonurl = 'https://api.sportradar.us/oddscomparison-rowt1/en/eu/sports/sr:sport:'.$sportid.'/tournaments.json?api_key='.env('SPORTRADAR_KEY_ODD_ROW');            
 
         $jsondata = file_get_contents($jsonurl);
         $json = json_decode(utf8_decode($jsondata), true);
-        $tournaments = (isset($json['tournaments']) ? $json['tournaments'] : null);
+        $tournaments = collect((isset($json['tournaments']) ? $json['tournaments'] : null));
+        
+        $tournamentsfiltered = $tournaments->where('category.id', 'sr:category:'.$categoryid);
 
-
-        $sports = Sport::All();
-        $sportname = Sport::find($sportid)->name;
-        return view('admin.tournamentslist', ['sports' => $sports, 'sportid' => $sportid, 'sportname' => $sportname, 'tournaments' => $tournaments, 'dbtournaments' => Tournament::All()]);
+        return view('admin.tournamentslist', ['sportid' => $sportid, 'sportname' => $sportname, 'sports' => $sports, 'categoryid' => $categoryid, 'categoryname' => $categoryname, 'categories' => $categories, 'sports' => $sports, 'tournaments' => $tournamentsfiltered, 'dbtournaments' => Tournament::All()]);
     }
 
     /**
@@ -172,50 +196,20 @@ class AdminController extends Controller
 
             $jsondata = file_get_contents($jsonurl);
             $json = json_decode(utf8_decode($jsondata), true);
-            $tournaments = $json['tournaments'];
+            $tournaments = collect((isset($json['tournaments']) ? $json['tournaments'] : null));
 
-            foreach($request->tournamentschk as $key=>$value)
+            $tournamentschk = array_keys($request->tournamentschk);
+            foreach($tournamentschk as $key => $value)
+            $tournamentschk[$key] = 'sr:tournament:'.$value;
+
+            $tournamentsfiltered = $tournaments->whereIn('id', $tournamentschk);
+            //return dd($categoriesfiltered);
+
+            foreach($tournamentsfiltered as $tournament)
             {
-                foreach($tournaments as $tournament) {
-                    if(($tournament['id'] == "sr:tournament:" . $key) && (!Tournament::find($key)) )
-                    {
-                        $season_id = explode(':', $tournament['current_season']['id'])[2];
-
-                        if(!Season::find($season_id))
-                        {
-                            Season::updateOrCreate([
-                                'id' => $season_id,
-                                'name' => $tournament['current_season']['name'],
-                                'start_date' => $tournament['current_season']['start_date'],
-                                'end_date' => $tournament['current_season']['end_date'],
-                                'year' => $tournament['current_season']['year']
-                            ]);
-                        }
-
-                        $category_id = explode(':', $tournament['category']['id'])[2];
-
-                        if(!Category::find($category_id))
-                        {
-                            Category::updateOrCreate([
-                                'id' => $category_id,
-                                'name' => $tournament['category']['name'],
-                                'country_code' => (isset($tournament['category']['country_code']) ? $tournament['category']['country_code']: ''),
-                                'outrights' => (isset($tournament['category']['outrights']) ? $tournament['category']['outrights']: false),
-                                'sport_id' => explode(':', $tournament['sport']['id'])[2]
-                            ]);
-                        }
-
-                        Tournament::updateOrCreate([
-                            'id' => $key,
-                            'name' => $tournament['name'],
-                            'sport_id' => explode(':', $tournament['sport']['id'])[2],
-                            'category_id' => explode(':', $tournament['category']['id'])[2],
-                            'season_id' => explode(':', $tournament['current_season']['id'])[2]
-                        ]);
-                    }
-                }
+                $t = new Tournament;
+                $t->saveTournament($tournament);
             }
-        }
 
         return redirect()->route('admin.tournaments');
     }
