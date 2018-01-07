@@ -19,6 +19,16 @@
                         </div>
                     </a>
 
+                    <a href="{{ route('admin.db.categories') }}">
+                        <div class="col-md-4">
+                            <div class="panel-heading">Categories</div>
+
+                            <div class="panel-body">
+                                <img src="/img/admin/categories.jpg">
+                            </div>
+                        </div>
+                    </a>
+
                 </div>
             </div>
         </div>

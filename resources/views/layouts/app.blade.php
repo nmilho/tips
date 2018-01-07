@@ -48,6 +48,9 @@
                                     <a href="{{ route('admin.db.sports') }}">
                                         Sports
                                     </a>
+                                    <a href="{{ route('admin.db.categories') }}">
+                                        Categories
+                                    </a>
                                 </li>
                             </ul>
                         </li>
