@@ -15,8 +15,18 @@ Auth::routes();
 
 Route::get('/', 'HomeController@index');
 Route::prefix('admin')->group(function() {
+  
   Route::get('/login', 'Auth\AdminLoginController@showLoginForm')->name('admin.login');
   Route::post('/login', 'Auth\AdminLoginController@login')->name('admin.login.submit');
+  
   Route::get('/', 'AdminController@index')->name('admin.dashboard');
-  Route::get('/store', 'AdminController@store')->name('admin.storage');
+
+  Route::get('/db', 'AdminController@db')->name('admin.db');
+
+  Route::get('/db/sports', 'AdminController@dbSports')->name('admin.db.sports');
+  Route::post('/db/sports/update', 'AdminController@dbSportsUpdate')->name('admin.db.sportsupdate');
+
+  Route::get('/db/categories', 'AdminController@dbCategories')->name('admin.db.categories');
+  Route::post('/db/categories', 'AdminController@dbCategories')->name('admin.db.categories');
+  Route::post('/db/categories/update', 'AdminController@dbCategoriesUpdate')->name('admin.db.categoriesupdate');
 });

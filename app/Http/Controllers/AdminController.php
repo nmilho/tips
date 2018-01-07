@@ -28,54 +28,158 @@ class AdminController extends Controller
      */
     public function index()
     {
-        return view('admin');
+
+        return view('admin.admin');
     }
 
     /**
-     * Display a listing of sports.
+     * Admin database
      *
      * @return \Illuminate\Http\Response
      */
-    public function store()
+    public function db()
     {
-        $jsondata = file_get_contents('https://api.sportradar.us/soccer-xt3/eu/en/schedules/2017-12-14/schedule.json?api_key='.env('SPORTRADAR_KEY'));
+        return view('admin.db');
+    }
+
+    /**
+     * Admin table admin sports
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function dbSports()
+    {
+        $jsonurl = 'https://api.sportradar.us/oddscomparison-rowt1/en/eu/sports.json?api_key='.env('SPORTRADAR_KEY_ODD_ROW');
+
+        $jsondata = file_get_contents($jsonurl);
         $json = json_decode(utf8_decode($jsondata), true);
-        $matches = $json['sport_events'];
+
+        $sports = collect($json['sports']);
         
-        //return dd($matches);
+        $dbsportsid =Sport::All()->pluck('id');
 
-        foreach($matches as $id => $match) 
+        foreach($dbsportsid as $key => $value)
+            $dbsportsid[$key] = 'sr:sport:'.$value;
+        
+        $sportsfiltered = $sports->whereNotIn('id', $dbsportsid);
+
+        return view('admin.dbSports', ['dbsports' => Sport::All(), 'sports' => $sportsfiltered]);
+    }
+
+    /**
+     * Show the application dashboard.
+     *
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function dbSportsUpdate(Request $request)
+    {
+        if($request)
         {
-            //$data = array('id'=>$match['tournament']['sport']['id'], 'name'=>$match['tournament']['sport']['name']);
-            $sport = new Sport();
-            $sport->saveSport($match['tournament']['sport']);
+            $this->validate($request, [
+                'sportschk'   => 'required'
+            ]);
 
-            $category = new Category();
-            $category->saveCategory($match['tournament']['category']);
-
-            $tournament = new Tournament();
-            $tournament->saveTournament($match['tournament']);
-
-            $season = new Season();
-            $season->saveSeason($match['season']);
-
-            $competitor = new Competitor();
-            $competitor->saveCompetitor($match['competitors'][0]);
-            $competitor = new Competitor();
-            $competitor->saveCompetitor($match['competitors'][1]);
-
-            $data = array('id'=>$match['id'], 'scheduled'=>$match['scheduled'], 'season'=>$match['season']['id'], 
-                        'tournament'=>$match['tournament']['id'], 'competitorh'=>$match['competitors'][0]['id'],
-                        'competitora'=>$match['competitors'][1]['id']);
+            foreach($request->sportschk as $key=>$value)
+            {
+                $sport = new Sport;
+                $sport->saveSport( ['id' => $key, 'name' => $value] );
+            }
+        }
+        return redirect()->route('admin.db.sports');
+    }
 
 
-            $_match = Match::updateOrCreate($data);
+
+    /**
+     * Display a specified ticket.
+     *
+     * @param  Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function dbCategories(Request $request)
+    {
+        
+        $sport_id = 0;
+        if($request->sport_id)
+        {
+            $sport_id = $request->sport_id;
         }
 
-        //TODO::return view with last store summary
+        if($sport_id !== 0)
+        {
+
+            $jsonurl = 'https://api.sportradar.us/oddscomparison-rowt1/en/eu/sports/sr:sport:'.$sport_id.'/categories.json?api_key='.env('SPORTRADAR_KEY_ODD_ROW');            
+            $jsondata = file_get_contents($jsonurl);
+            $json = json_decode(utf8_decode($jsondata), true);
+
+            $categories = collect((isset($json['categories']) ? $json['categories'] : null));
+
+            $dbcategoriesid = Category::All()->pluck('id');
+
+            foreach($dbcategoriesid as $key => $value)
+                $dbcategoriesid[$key] = 'sr:category:'.$value;
+
+            $categoriesfiltered = $categories->whereNotIn('id', $dbcategoriesid);
+
+            $sports = Sport::All();
+
+            $sportname = $sports->where('id', $sport_id)->pluck('name')->first();
+            
+            return view('admin.dbCategories', ['sports' => $sports, 'sport_id' => $sport_id, 'sportname' => $sportname, 'cats' => $categoriesfiltered, 'dbcats' => Category::All()]);
+        }
+        else 
+        {
+            $dbcategoriesid = Category::All()->pluck('id');
+            foreach($dbcategoriesid as $key => $value)
+                $dbcategoriesid[$key] = 'sr:category:'.$value;
+
+            $sports = Sport::All();
+
+            return view('admin.dbCategories', ['sports' => $sports, 'sport_id' => $sport_id, 'dbcats' => Category::All()]);
+        }
 
 
-        //return View('tournaments', [ 'tournaments' => $tournaments ]);
-        //return View('tournaments');
+    }
+
+
+
+
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function dbCategoriesUpdate(Request $request)
+    {
+        if($request)
+        {
+            $jsonurl = 'https://api.sportradar.us/oddscomparison-rowt1/en/eu/categories.json?api_key='.env('SPORTRADAR_KEY_ODD_ROW');  
+
+            $jsondata = file_get_contents($jsonurl);
+            $json = json_decode(utf8_decode($jsondata), true);
+
+            $categories = collect((isset($json['categories']) ? $json['categories'] : null));
+
+            $catschk = array_keys($request->catschk);
+            foreach($catschk as $key => $value)
+                $catschk[$key] = 'sr:category:'.$value;
+
+            $categoriesfiltered = $categories->whereIn('id', $catschk);
+            
+            
+
+            foreach($categoriesfiltered as $category)
+            {
+                $c = new Category;
+                $c->saveCategory($category);
+                $sport_id = $c['sport_id'];
+            }
+        }
+        return redirect()->action(
+                    'AdminController@dbCategories', ['sport_id' => $sport_id]
+                );
+        return redirect()->route('admin.db.categories')->with('sport_id', $sport_id);
     }
 }
