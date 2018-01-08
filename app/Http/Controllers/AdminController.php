@@ -284,4 +284,140 @@ class AdminController extends Controller
     }
 
 
+
+
+
+
+
+    /**
+     * Display a specified ticket.
+     *
+     * @param  Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function dbMatches(Request $request)
+    {
+        $sports = Sport::All()->sortBy('name');
+        $sport_id = 0;
+        if($request->sport_id)
+        {
+            $sport_id = $request->sport_id;
+        }
+
+        if($sport_id !== 0)
+        {
+            $sportname = Sport::find($sport_id)->name;
+
+            $categories = Category::All()->where('sport_id', $sport_id)->sortBy('name');
+
+            $category_id = 0;
+            if($request->category_id)
+            {
+                $category_id = $request->category_id;
+            }
+
+            if($category_id !== 0)
+            {
+                $categoryname = Category::find($category_id)->name;
+
+                $tournaments = Tournament::All()->where('sport_id', $sport_id)->where('category_id', $category_id)->sortBy('name');
+
+                $tournament_id = 0;
+                if($request->tournament_id)
+                {
+                    $tournament_id = $request->tournament_id;
+                }
+
+                if($tournament_id !== 0)
+                {
+                    $tournamentname = Tournament::find($tournament_id)->name;
+
+                    $jsonurl = 'https://api.sportradar.us/oddscomparison-rowt1/en/eu/tournaments/sr:tournament:'.$tournament_id.'/schedule.json?api_key='.env('SPORTRADAR_KEY_ODD_ROW');            
+                    $jsondata = file_get_contents($jsonurl);
+                    $json = json_decode(utf8_decode($jsondata), true);
+
+                    $matches = collect((isset($json['sport_events']) ? $json['sport_events'] : null));
+
+                    $dbmatchesid = Match::All()->pluck('id');
+
+                    foreach($dbmatchesid as $key => $value)
+                        $dbmatchesid[$key] = 'sr:match:'.$value;
+
+                    $matchesfiltered = $matches->whereNotIn('id', $dbmatchesid);
+                    
+                    $matchesfiltered = $matchesfiltered->where('tournament.id', 'sr:tournament:'.$tournament_id);
+
+                    return view('admin.dbMatches', ['sport_id' => $sport_id, 'sportname' => $sportname, 'sports' => $sports, 'category_id' => $category_id, 'categoryname' => $categoryname, 'categories' => $categories, 'tournament_id' => $tournament_id, 'tournamentname' => $tournamentname, 'tournaments' => $tournaments, 'matches' => $matchesfiltered, 'dbmatches' => Match::All()->sortBy('name')]);
+                }
+                else
+                {
+                    $sports = Sport::All()->sortBy('name');
+                    $categories = Category::All()->where('sport_id', $sport_id);
+                    $tournaments = Tournament::All()->where('sport_id', $sport_id)->where('category_id', $category_id);
+
+                    return view('admin.dbMatches', ['sports' => $sports, 'sport_id' => $sport_id, 'categories' => $categories, 'category_id' => $category_id, 'tournaments' => $tournaments, 'tournament_id' => $tournament_id]);
+                }
+            }
+            else
+            {
+                $sports = Sport::All()->sortBy('name');
+                $categories = Category::All()->where('sport_id', $sport_id);
+
+                return view('admin.dbMatches', ['sports' => $sports, 'sport_id' => $sport_id, 'categories' => $categories, 'category_id' => $category_id]);
+            }
+        }
+        else
+        {
+            $sports = Sport::All()->sortBy('name');
+
+            return view('admin.dbMatches', ['sports' => $sports, 'sport_id' => $sport_id]);
+        }
+    }
+
+
+
+
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function dbMatchesUpdate(Request $request)
+    {
+        if($request)
+        {
+            $jsonurl = 'https://api.sportradar.us/oddscomparison-rowt1/en/eu/tournaments/sr:tournament:'.$request->tournament_id.'/schedule.json?api_key='.env('SPORTRADAR_KEY_ODD_ROW');            
+            $jsondata = file_get_contents($jsonurl);
+            $json = json_decode(utf8_decode($jsondata), true);
+
+            $matches = collect((isset($json['sport_events']) ? $json['sport_events'] : null));
+
+            $matcheschk = array_keys($request->matcheschk);
+            foreach($matcheschk as $key => $value)
+                $matcheschk[$key] = 'sr:match:'.$value;
+
+            $matchesfiltered = $matches->whereIn('id', $matcheschk);
+            
+            
+            foreach($matchesfiltered as $match)
+            {
+                $ch = new Competitor;
+                $ch->saveCompetitor($match['competitors'][0]);
+
+                $ca = new Competitor;
+                $ca->saveCompetitor($match['competitors'][1]);
+
+                $m = new Match;
+                $m->saveMatch($match);
+
+
+                $sport_id = $m['sport_id'];                
+                $category_id = $m['category_id'];
+                $tournament_id = $m['tournament_id'];
+            }
+        }
+        return redirect()->action( 'AdminController@dbMatches', ['sport_id' => $sport_id, 'category_id' => $category_id, 'tournament_id' => $tournament_id] );
+    }
+
+
 }

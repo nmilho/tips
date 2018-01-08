@@ -54,6 +54,9 @@
                                     <a href="{{ route('admin.db.tournaments') }}">
                                         Tournaments
                                     </a>
+                                    <a href="{{ route('admin.db.matches') }}">
+                                        Matches
+                                    </a>
                                 </li>
                             </ul>
                         </li>

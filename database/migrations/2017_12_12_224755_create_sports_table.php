@@ -14,8 +14,7 @@ class CreateSportsTable extends Migration
     public function up()
     {
         Schema::create('sports', function (Blueprint $table) {
-            $table->string('id')->unique();
-            $table->primary('id');
+            $table->increments('id');
             $table->string('name');
             $table->timestamps();
         });

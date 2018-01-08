@@ -11,6 +11,8 @@ class Competitor extends Model
 
     public function saveCompetitor($data)
 	{
+		$data['id'] = ( (!strtok($data['id'], ':').strtok(':')) ? strtok(':') : $data['id'] ) ;
+
 		$competitor = Competitor::find($data['id']);
 
 		if($competitor == null)

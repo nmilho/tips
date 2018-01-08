@@ -14,15 +14,16 @@ class CreateTournamentsTable extends Migration
     public function up()
     {
         Schema::create('tournaments', function (Blueprint $table) {
-            $table->string('id')->unique();
-            $table->primary('id');
+            $table->increments('id');
             $table->string('name');
-            $table->string('sport');
-            $table->string('category');
+            $table->integer('sport_id')->unsigned();
+            $table->integer('category_id')->unsigned();
+            $table->integer('season_id')->unsigned();
             $table->timestamps();
-
-            $table->foreign('sport')->references('id')->on('sports');
-            $table->foreign('category')->references('id')->on('categories');
+            
+            $table->foreign('sport_id')->references('id')->on('sports');
+            $table->foreign('category_id')->references('id')->on('categories');
+            $table->foreign('season_id')->references('id')->on('seasons');
         });
     }
 

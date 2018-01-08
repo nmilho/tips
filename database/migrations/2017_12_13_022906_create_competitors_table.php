@@ -14,8 +14,7 @@ class CreateCompetitorsTable extends Migration
     public function up()
     {
         Schema::create('competitors', function (Blueprint $table) {
-            $table->string('id')->unique();
-            $table->primary('id');
+            $table->increments('id');
             $table->string('name');
             $table->string('country');
             $table->string('country_code');

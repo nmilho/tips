@@ -39,6 +39,16 @@
                         </div>
                     </a>
 
+                    <a href="{{ route('admin.db.matches') }}">
+                        <div class="col-md-4">
+                            <div class="panel-heading">Matches</div>
+
+                            <div class="panel-body">
+                                <img src="/img/admin/matches.jpg">
+                            </div>
+                        </div>
+                    </a>
+
                 </div>
             </div>
         </div>

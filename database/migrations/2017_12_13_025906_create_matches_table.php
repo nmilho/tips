@@ -14,19 +14,22 @@ class CreateMatchesTable extends Migration
     public function up()
     {
         Schema::create('matches', function (Blueprint $table) {
-            $table->string('id')->unique();
-            $table->primary('id');
+            $table->increments('id');
             $table->string('scheduled');
-            $table->string('season');
-            $table->string('tournament');
-            $table->string('competitorh');
-            $table->string('competitora');            
+            $table->integer('season_id')->unsigned();
+            $table->integer('tournament_id')->unsigned();
+            $table->integer('sport_id')->unsigned();
+            $table->integer('category_id')->unsigned();
+            $table->integer('competitor_home_id')->unsigned();
+            $table->integer('competitor_away_id')->unsigned();            
             $table->timestamps();
 
-            $table->foreign('season')->references('id')->on('seasons');
-            $table->foreign('tournament')->references('id')->on('tournaments');
-            $table->foreign('competitorh')->references('id')->on('competitors');
-            $table->foreign('competitora')->references('id')->on('competitors');
+            $table->foreign('sport_id')->references('id')->on('sports');
+            $table->foreign('category_id')->references('id')->on('categories');
+            $table->foreign('season_id')->references('id')->on('seasons');
+            $table->foreign('tournament_id')->references('id')->on('tournaments');
+            $table->foreign('competitor_home_id')->references('id')->on('competitors');
+            $table->foreign('competitor_away_id')->references('id')->on('competitors');
         });
     }
 

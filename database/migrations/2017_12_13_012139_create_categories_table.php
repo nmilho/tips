@@ -14,11 +14,13 @@ class CreateCategoriesTable extends Migration
     public function up()
     {
         Schema::create('categories', function (Blueprint $table) {
-            $table->string('id')->unique();
-            $table->primary('id');
+            $table->increments('id');
             $table->string('name');
             $table->string('country_code');
+            $table->boolean('outrights');
+            $table->integer('sport_id')->unsigned();
             $table->timestamps();
+            $table->foreign('sport_id')->references('id')->on('sports');
         });
     }
 

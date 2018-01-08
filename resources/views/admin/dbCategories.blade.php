@@ -16,9 +16,9 @@
                                 <label class="col-md-2 control-label">Sport</label>
                                 <div class="col-md-8">
                                     <select onchange="submit();" class="selectpicker form-control" title="sport" id="sport_id" name="sport_id">
-                                        <option {{ $sport_id == 0 ? "selected" : "" }} value="0">--- Select ---</option>
+                                        <option {{ (isset($sport_id) && $sport_id == 0) ? "selected" : "" }} value="0">--- Select ---</option>
                                         @foreach($sports as $sport)
-                                        <option {{ $sport_id == $sport->id ? "selected" : "" }} value="{{ $sport->id }}">{{ $sport->name }}</option>
+                                        <option {{ (isset($sport_id) && $sport_id == $sport->id) ? "selected" : "" }} value="{{ $sport->id }}">{{ $sport->name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
