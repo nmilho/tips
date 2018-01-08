@@ -214,8 +214,16 @@ class AdminController extends Controller
                 $json = json_decode(utf8_decode($jsondata), true);
 
                 $tournaments = collect((isset($json['tournaments']) ? $json['tournaments'] : null));
+
+                $dbtournamentsid = Tournament::All()->pluck('id');
+
+                foreach($dbtournamentsid as $key => $value)
+                    $dbtournamentsid[$key] = 'sr:tournament:'.$value;
+
+                $tournamentsfiltered = $tournaments->whereNotIn('id', $dbtournamentsid);
                 
-                $tournamentsfiltered = $tournaments->where('category.id', 'sr:category:'.$category_id);
+                $tournamentsfiltered = $tournamentsfiltered->where('category.id', 'sr:category:'.$category_id);
+                //return dd($tournamentsfiltered);
 
                 return view('admin.dbTournaments', ['sport_id' => $sport_id, 'sportname' => $sportname, 'sports' => $sports, 'category_id' => $category_id, 'categoryname' => $categoryname, 'categories' => $categories, 'sports' => $sports, 'tournaments' => $tournamentsfiltered, 'dbtournaments' => Tournament::All()->sortBy('name')]);
             }
@@ -247,7 +255,7 @@ class AdminController extends Controller
     {
         if($request)
         {
-            $jsonurl = 'https://api.sportradar.us/oddscomparison-rowt1/pt/eu/tournaments.json?api_key='.env('SPORTRADAR_KEY_ODD_ROW');            
+            $jsonurl = 'https://api.sportradar.us/oddscomparison-rowt1/en/eu/tournaments.json?api_key='.env('SPORTRADAR_KEY_ODD_ROW');            
             $jsondata = file_get_contents($jsonurl);
             $json = json_decode(utf8_decode($jsondata), true);
 
@@ -266,10 +274,10 @@ class AdminController extends Controller
                 $s->saveSeason($tournament['current_season']);
 
                 $t = new Tournament;
-                $t->saveTournament($tournament);
+                $res = $t->saveTournament($tournament);
 
-                $sport_id = $t['sport']['id'];
-                $category_id = $t['category']['id'];
+                $sport_id = $t['sport_id'];                
+                $category_id = $t['category_id'];
             }
         }
         return redirect()->action( 'AdminController@dbTournaments', ['sport_id' => $sport_id, 'category_id' => $category_id] );

@@ -49,7 +49,7 @@
                             
                         <div class="panel-body">
                             <ul>
-                                @foreach($dbtournaments->where('sport_id', $sport_id) as $dbtournament)
+                                @foreach($dbtournaments->where('sport_id', $sport_id)->where('category_id', $category_id) as $dbtournament)
                                 <li class="col-md-2">{{ $dbtournament->name }}</li>
                                 @endforeach
                             </ul>
