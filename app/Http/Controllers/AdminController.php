@@ -347,6 +347,7 @@ class AdminController extends Controller
                     
                     $matchesfiltered = $matchesfiltered->where('tournament.id', 'sr:tournament:'.$tournament_id);
 
+
                     return view('admin.dbMatches', ['sport_id' => $sport_id, 'sportname' => $sportname, 'sports' => $sports, 'category_id' => $category_id, 'categoryname' => $categoryname, 'categories' => $categories, 'tournament_id' => $tournament_id, 'tournamentname' => $tournamentname, 'tournaments' => $tournaments, 'matches' => $matchesfiltered, 'dbmatches' => Match::All()->sortBy('name')]);
                 }
                 else

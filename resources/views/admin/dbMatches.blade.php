@@ -66,7 +66,7 @@
                         <div class="panel-body">
                             <ul>
                                 @foreach($dbmatches->where('sport_id', $sport_id)->where('category_id', $category_id)->where('tournament_id', $tournament_id) as $dbmatches)
-                                <li class="col-md-2">{{ $dbmatches->name }}</li>
+                                <li class="col-md-2">{{ $dbmatches->competitor_home->name.' - '.$dbmatches->competitor_away->name }}</li>
                                 @endforeach
                             </ul>
                         </div>

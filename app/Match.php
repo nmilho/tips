@@ -7,6 +7,22 @@ use Illuminate\Database\Eloquent\Model;
 class Match extends Model
 {
     protected $fillable = ['id', 'scheduled', 'season_id', 'tournament_id', 'sport_id', 'category_id', 'competitor_home_id', 'competitor_away_id'];
+
+    /**
+     * Get the user that owns the phone.
+     */
+    public function competitor_home()
+    {
+        return $this->belongsTo('App\Competitor');
+    }
+
+    /**
+     * Get the phone record associated with the user.
+     */
+    public function competitor_away()
+    {
+        return $this->belongsTo('App\Competitor');
+    }
     
     public function saveMatch($data)
 	{
