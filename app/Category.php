@@ -20,16 +20,16 @@ class Category extends Model
 			$this->id = $data['id'];
 			$this->name = $data['name'];
 			$this->country_code = (isset($data['country_code']) ? $data['country_code'] : '');
-            $this->outrights = $data['outrights'];
-            $this->sport_id = $data['sport_id'];
+            $this->outrights = (isset($data['outrights']) ? $data['outrights'] : '');
+            $this->sport_id = (isset($data['sport_id']) ? $data['sport_id'] : '');
 			$result = $this->save();
 		}
 		else 
 		{
 			$category->name = $data['name'];
 			$category->country_code = (isset($data['country_code']) ? $data['country_code'] : '');
-            $category->outrights = $data['outrights'];
-            $category->sport_id = $data['sport_id'];
+            $category->outrights = (isset($data['outrights']) ? $data['outrights'] : '');
+            $category->sport_id = (isset($data['sport_id']) ? $data['sport_id'] : '');
 			$result = $category->save();
 		}
 

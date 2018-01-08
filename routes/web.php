@@ -29,4 +29,8 @@ Route::prefix('admin')->group(function() {
   Route::get('/db/categories', 'AdminController@dbCategories')->name('admin.db.categories');
   Route::post('/db/categories', 'AdminController@dbCategories')->name('admin.db.categories');
   Route::post('/db/categories/update', 'AdminController@dbCategoriesUpdate')->name('admin.db.categoriesupdate');
+
+  Route::get('/db/tournaments', 'AdminController@dbTournaments')->name('admin.db.tournaments');
+  Route::post('/db/tournaments', 'AdminController@dbTournaments')->name('admin.db.tournaments');
+  Route::post('/db/tournaments/update', 'AdminController@dbTournamentsUpdate')->name('admin.db.tournamentsupdate');
 });

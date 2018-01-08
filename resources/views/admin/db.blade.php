@@ -29,6 +29,16 @@
                         </div>
                     </a>
 
+                    <a href="{{ route('admin.db.tournaments') }}">
+                        <div class="col-md-4">
+                            <div class="panel-heading">Tournaments</div>
+
+                            <div class="panel-body">
+                                <img src="/img/admin/tournaments.jpg">
+                            </div>
+                        </div>
+                    </a>
+
                 </div>
             </div>
         </div>
