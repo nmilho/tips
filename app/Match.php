@@ -9,7 +9,40 @@ class Match extends Model
     protected $fillable = ['id', 'scheduled', 'season_id', 'tournament_id', 'sport_id', 'category_id', 'competitor_home_id', 'competitor_away_id'];
 
     /**
-     * Get the user that owns the phone.
+     * Get the season record associated with the match.
+     */
+    public function season()
+    {
+        return $this->belongsTo('App\Season');
+    }
+
+    /**
+     * Get the tournament record associated with the match.
+     */
+    public function tournament()
+    {
+        return $this->belongsTo('App\Tournament');
+    }
+
+    /**
+     * Get the sport record associated with the match.
+     */
+    public function sport()
+    {
+        return $this->belongsTo('App\Sport');
+    }
+
+    /**
+     * Get the category record associated with the match.
+     */
+    public function category()
+    {
+        return $this->belongsTo('App\Category');
+    }
+
+
+    /**
+     * Get the home competitor record associated with the match.
      */
     public function competitor_home()
     {
@@ -17,7 +50,7 @@ class Match extends Model
     }
 
     /**
-     * Get the phone record associated with the user.
+     * Get the away competitor record associated with the match.
      */
     public function competitor_away()
     {

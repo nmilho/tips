@@ -21,7 +21,7 @@ Route::prefix('admin')->group(function() {
   
   Route::get('/', 'AdminController@index')->name('admin.dashboard');
 
-  Route::get('/db', 'AdminController@db')->name('admin.db');
+  //Route::get('/db', 'AdminController@db')->name('admin.db');
 
   Route::get('/db/sports', 'AdminController@dbSports')->name('admin.db.sports');
   Route::post('/db/sports/update', 'AdminController@dbSportsUpdate')->name('admin.db.sportsupdate');
@@ -37,4 +37,10 @@ Route::prefix('admin')->group(function() {
   Route::get('/db/matches', 'AdminController@dbMatches')->name('admin.db.matches');
   Route::post('/db/matches', 'AdminController@dbMatches')->name('admin.db.matches');
   Route::post('/db/matches/update', 'AdminController@dbMatchesUpdate')->name('admin.db.matchesupdate');
+
+  Route::get('/db', 'Db\DbController@index')->name('admin.db.index');
+
+  Route::get('/db/books', 'Db\DbController@books')->name('admin.db.books');
+  Route::post('/db/books', 'Db\DbController@books')->name('admin.db.books');
+  Route::post('/db/books/update', 'Db\DbController@updatebooks')->name('admin.db.updatebooks');
 });

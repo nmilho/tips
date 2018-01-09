@@ -421,4 +421,55 @@ class AdminController extends Controller
     }
 
 
+
+
+    /**
+     * Admin table admin books
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function dbBooks()
+    {
+        $jsonurl = 'https://api.sportradar.us/oddscomparison-rowt1/en/eu/books.json?api_key='.env('SPORTRADAR_KEY_ODD_ROW');
+
+        $jsondata = file_get_contents($jsonurl);
+        $json = json_decode(utf8_decode($jsondata), true);
+
+        $booksRq = collect((isset($json['books']) ? $json['books'] : null));
+        $booksDb = Book::All();
+
+        $bookIdOnDb = $booksDb->pluck('id');
+
+        foreach($bookIdOnDb as $key => $value)
+            $bookIdOnDb[$key] = 'sr:book:'.$value;
+        
+        $booksRq = $booksRq->whereNotIn('id', $bookIdOnDb);
+
+        return view('admin.dbBooks', ['booksDb' => $booksDb, 'booksRq' => $booksRq]);
+    }
+
+    /**
+     * Show the application dashboard.
+     *
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function dbBooksUpdate(Request $request)
+    {
+        if($request)
+        {
+            $this->validate($request, [
+                'sportschk'   => 'required'
+            ]);
+
+            foreach($request->sportschk as $key=>$value)
+            {
+                $sport = new Sport;
+                $sport->saveSport( ['id' => $key, 'name' => $value] );
+            }
+        }
+        return redirect()->route('admin.db.sports');
+    }
+
 }
