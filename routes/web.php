@@ -23,8 +23,8 @@ Route::prefix('admin')->group(function() {
 
   //Route::get('/db', 'AdminController@db')->name('admin.db');
 
-  Route::get('/db/sports', 'AdminController@dbSports')->name('admin.db.sports');
-  Route::post('/db/sports/update', 'AdminController@dbSportsUpdate')->name('admin.db.sportsupdate');
+  //Route::get('/db/sports', 'AdminController@dbSports')->name('admin.db.sports');
+  //Route::post('/db/sports/update', 'AdminController@dbSportsUpdate')->name('admin.db.sportsupdate');
 
   Route::get('/db/categories', 'AdminController@dbCategories')->name('admin.db.categories');
   Route::post('/db/categories', 'AdminController@dbCategories')->name('admin.db.categories');
@@ -43,4 +43,6 @@ Route::prefix('admin')->group(function() {
   Route::get('/db/books', 'Db\DbController@books')->name('admin.db.books');
   Route::post('/db/books', 'Db\DbController@books')->name('admin.db.books');
   Route::post('/db/books/update', 'Db\DbController@updatebooks')->name('admin.db.updatebooks');
+
+  Route::get('/db/sports', 'Db\DbController@sports')->name('admin.db.sports');
 });
