@@ -15,12 +15,12 @@
     <link href="{{ url('/').'/css/vendor/bootstrap/css/bootstrap.min.css' }}" rel="stylesheet">-->
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 
-    <!-- MetisMenu CSS -->
-    <link href="{{ url('/').'/css/vendor/metisMenu/metisMenu.min.css' }}" rel="stylesheet">
+    <!-- MetisMenu CSS 
+    <link href="{{ url('/').'/css/vendor/metisMenu/metisMenu.min.css' }}" rel="stylesheet">-->
 
     <!-- DataTables CSS 
-    <link href="{{ url('/').'/css/vendor/datatables-plugins/dataTables.bootstrap.css' }}" rel="stylesheet">-->
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/dataTables.bootstrap.min.css">
+    <link href="{{ url('/').'/css/vendor/datatables-plugins/dataTables.bootstrap.css' }}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/dataTables.bootstrap.min.css">-->
 
     <!-- DataTables Responsive CSS 
     <link href="{{ url('/').'/css/vendor/datatables-responsive/dataTables.responsive.css' }}" rel="stylesheet">-->

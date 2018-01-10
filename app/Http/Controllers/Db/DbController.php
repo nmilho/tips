@@ -11,6 +11,8 @@ use App\Tournament;
 use App\Match;
 use App\Book;
 use App\Http\Controllers\Controller;
+use File;
+use Validator;
 
 class DbController extends Controller
 {
@@ -52,9 +54,16 @@ class DbController extends Controller
 
         $jsondata = file_get_contents($request);
         $json = json_decode(utf8_decode($jsondata), true);*/
+        $path = storage_path().'\json\books.json'; // ie: /var/www/laravel/app/storage/json/filename.json
+        
+        if (!File::exists($path)) {
+            return dd($path);
+        }
 
-        $jsondata = 'books.json'
-        $json = json_decode(utf8_decode($jsondata), true);
+        $file = File::get($path); // string
+        //return dd($file);
+
+        $json = json_decode(utf8_decode($file), true);
 
         $books = collect($json['books']);
         
@@ -78,7 +87,33 @@ class DbController extends Controller
      */
     public function updatebooks(Request $request)
     {
+        //return response()->json(['response' => 'This is get method']);
+        /*$data = $request;
+        return response ()->json ( $data );*/
+        $rules = array (
+            'name' => 'required'
+        );
 
+        //return response()->json($request->toArray());
+
+        $validator = Validator::make ( $request->toArray(), $rules );
+        //return response ()->json ( $validator->fails() );
+        if ($validator->fails ())
+            return response()->json( array('errors' => $validator->getMessageBag()->toArray()) );
+
+        else {
+
+
+            if($request)
+            {
+                $book = new Book;
+                $res = $book->saveBook( $request );
+                return response ()->json( $res );
+            }
+        }
+        //return redirect()->route('admin.db.sports');*/
+
+        /*
         $rules = array (
                 'fname' => 'required|alpha'
         );
@@ -140,8 +175,15 @@ class DbController extends Controller
 
         $jsondata = file_get_contents($request);
         $json = json_decode(utf8_decode($jsondata), true);*/
-        $jsondata = 'sports.json'
-        $json = json_decode(utf8_decode($jsondata), true);
+        $path = storage_path().'\json\sports.json'; // ie: /var/www/laravel/app/storage/json/filename.json
+        
+        if (!File::exists($path)) {
+            return dd($path);
+        }
+
+        $file = File::get($path); // string
+        //return dd($file);
+        $json = json_decode(utf8_decode($file), true);
 
         $sports = collect($json['sports']);
         

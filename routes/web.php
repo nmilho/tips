@@ -46,4 +46,5 @@ Route::prefix('admin')->group(function() {
   Route::post('/db/books/delete', 'Db\DbController@deletebooks')->name('admin.db.deletebooks');
 
   Route::get('/db/sports', 'Db\DbController@sports')->name('admin.db.sports');
+
 });

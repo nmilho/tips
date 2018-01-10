@@ -64,6 +64,14 @@ $(document).ready(function() {
 } );
 
 function fillBookModalData (details){
-    $('#fid').val(details[0]);
+    $('#fid').val(intval(details[0]));
     $('#fname').val(details[1]);
-  }
+}
+
+function intval(string)
+{    
+    if(string)
+        var strArray = string.match(/(\d+)/g);
+
+    return strArray[0];
+}

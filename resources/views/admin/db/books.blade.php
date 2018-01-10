@@ -14,15 +14,14 @@
   <div class="col-lg-6">
     <div class="panel panel-default">
       <div class="panel-heading">
-          Booker on Radar
+          Bookers on Radar
       </div>
       <!-- /.panel-heading -->
       <div class="panel-body">
         <div class="table">
-          <table id="radarBooks" class="table" ><!--table-striped table-bordered table-hover-->
+          <table id="radarBooks" class="table table-striped table-hover" ><!--table-striped table-bordered table-hover-->
               <thead>
                 <tr>
-                  <th class="text-center">All</th>
                   <th class="text-center">Id</th>
                   <th class="text-center">Name</th>
                   <th class="text-center">Actions</th>
@@ -31,24 +30,13 @@
               <tbody>
               @foreach($books as $book)
                 <tr>
-                  <td>1</td>
-                  <td>{{ $book['id'] }}</td>
-                  <td>{{ $book['name'] }}</td>
-                  <td>
-                    <button class="detail-modal btn btn-sm btn-info" 
-                      data-info="{{ $book['id'] }},{{ $book['name'] }}">
-                      <span class="fa fa-detail"></span> 
-                      Detail
-                    </button>
+                  <td class="text-center">{{ $book['id'] }}</td>
+                  <td class="text-center">{{ $book['name'] }}</td>
+                  <td class="text-center">
                     <button class="save-modal btn btn-sm btn-success" 
                       data-info="{{ $book['id'] }},{{ $book['name'] }}">
                       <span class="fa fa-save"></span> 
                       Save
-                    </button>
-                    <button class="delete-modal btn btn-sm btn-danger"
-                      data-info="{{ $book['id'] }},{{ $book['name'] }}">
-                      <span class="fa fa-trash"></span> 
-                      Delete
                     </button>
                   </td>
                   </td>
@@ -64,25 +52,30 @@
   <div class="col-lg-6">
     <div class="panel panel-default">
       <div class="panel-heading">
-          Booker on Database
+          Bookers on Database
       </div>
       <!-- /.panel-heading -->
       <div class="panel-body">
         <div class="table">
-          <table id="dbBooks" class="table table-striped table-bordered table-hover">
+          <table id="dbBooks" class="table table-striped table-hover">
               <thead>
                 <tr>
-                  <th>All</th>
-                  <th>Id</th>
-                  <th>Name</th>
+                  <th class="text-center">Id</th>
+                  <th class="text-center">Name</th>
+                  <th class="text-center">Actions</th>
                 </tr>
               </thead>
               <tbody>
               @foreach($booksDb as $book)
                 <tr>
-                  <td>1</td>
-                  <td>{{ $book['id'] }}</td>
-                  <td>{{ $book['name'] }}</td>
+                  <td class="text-center">{{ $book['id'] }}</td>
+                  <td class="text-center">{{ $book['name'] }}</td>
+                  <td class="text-center"><button class="delete-modal btn btn-sm btn-danger"
+                        data-info="{{ $book['id'] }},{{ $book['name'] }}">
+                        <span class="fa fa-trash"></span> 
+                        Delete
+                    </button>
+                  </td>
                 </tr>
               @endforeach
               </tbody>
@@ -118,9 +111,10 @@
             <div class="form-group">
               <label class="control-label col-sm-2" for="fname">Name</label>
               <div class="col-sm-10">
-                <input type="name" class="form-control" id="fname">
+                <input type="name" class="form-control" id="fname" disabled="" >
               </div>
             </div>
+            <p class="fname_error error text-center alert alert-danger hidden"></p>
           </form>
           <div class="deleteContent">
             Are you Sure you want to delete <span class="dname"></span> ? <span class="hidden did"></span>
@@ -142,18 +136,6 @@
 @section('actionscripts')
 
 <script>
-
-  $(document).on('click', '.detail-modal', function() {
-    $('#footer_action_button').hide();
-    $('.actionBtn').hide();
-    $('.modal-title').text('Detail');
-    $('.deleteContent').hide();
-    $('.form-horizontal').show();
-    var stuff = $(this).data('info').split(',');
-    fillBookModalData(stuff);
-    $('#myModal').modal('show');
-  });
-
   $(document).on('click', '.save-modal', function() {
     $('#footer_action_button').show();
     $('#footer_action_button').text("Save");
@@ -209,61 +191,42 @@
     });
 
   $('.modal-footer').on('click', '.save', function() {
-    /*$.ajax({
-        type: 'post',
-        url: '{{ route('admin.db.updatebooks') }}',
-        data: {
-            '_token': $('input[name=_token]').val(),
-            'id': $("#fid").val()
-        },
-        success: function(data) {
-            if (data.errors){
-                $('#myModal').modal('show');
-                if(data.errors.fname) {
-                    $('.fname_error').removeClass('hidden');
-                    $('.fname_error').text("name can't be empty !");
-                }
-            }
-             else {
-                 
-                 $('.error').addClass('hidden');
-            $('.item' + data.id).replaceWith("<tr class='item" + data.id + "'><td>" +
-                    data.id + "</td><td>" + data.name +
-                    "</td><td><button class='edit-modal btn btn-info' data-info='" + data.id+","+data.name+"'><span class='glyphicon glyphicon-edit'></span> Edit</button> <button class='delete-modal btn btn-danger' data-info='" + data.id+","+data.name+"' ><span class='glyphicon glyphicon-trash'></span> Delete</button></td></tr>");
-                  }
-            }
-          });*/
-    
         var name = $('#fname').val();
         var id = $("#fid").val()
-        
-        
+
         $.ajax({
             type: "POST",
+            headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}'},
             url: '{{ route('admin.db.updatebooks') }}',
             data: {id: id, name: name},
-            success: function( msg ) {
-                $("#ajaxResponse").append("<div>"+msg+"</div>");
+            success: function( data, status, error ) {
+                /*console.log('Data => ' + JSON.stringify(data));
+                console.log('Status => ' + status);
+                console.log('Error => ' + JSON.stringify(error, null, 2));*/
+                if (data.errors){
+                  $('#myModal').modal('show');
+                  if(data.errors.name) {
+                      $('.fname_error').removeClass('hidden');
+                      $('.fname_error').text(data.errors.name);
+                  }
+                }
+                else {
+                   
+                   $('.error').addClass('hidden');
+                    $('.item' + data.id).replaceWith("<tr class='item" + data.id + "'><td>" +
+                      data.id + "</td><td>" + data.name +
+                      "</td><td><button class='edit-modal btn btn-info' data-info='" + data.id+","+data.name+"'><span class='glyphicon glyphicon-edit'></span> Edit</button> <button class='delete-modal btn btn-danger' data-info='" + data.id+","+data.name+"' ><span class='glyphicon glyphicon-trash'></span> Delete</button></td></tr>");
+                      location.reload();
+                }
+            },
+            error: function(request, status, error) {
+                console.log('Request->message => ' + request.responseJSON['message']);
+                console.log('Status => ' + status);
+                console.log('Error => ' + error);
             }
         });
 
   });
-
-  $('#submit').on('submit', function (e) {
-        e.preventDefault();
-        var title = $('#title').val();
-        var body = $('#body').val();
-        var published_at = $('#published_at').val();
-        $.ajax({
-            type: "POST",
-            url: host + '/articles/create',
-            data: {title: title, body: body, published_at: published_at},
-            success: function( msg ) {
-                $("#ajaxResponse").append("<div>"+msg+"</div>");
-            }
-        });
-    });
-
 
 </script>
 
