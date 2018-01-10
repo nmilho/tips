@@ -47,7 +47,6 @@ class DbController extends Controller
      */
     public function books()
     {
-
         $radarurl = 'https://api.sportradar.us/oddscomparison-rowt1/en/eu/books.json?api_key=';
         $request = $radarurl.env('SPORTRADAR_KEY_ODD_ROW');
 
@@ -65,6 +64,63 @@ class DbController extends Controller
         $books = $books->whereNotIn('id', $booksIdDb);
 
         return view('admin.db.books', ['booksDb' => $booksDb->sortBy('name'), 'books' => $books->sortBy('name')]);
+    }
+
+    /**
+     * Show the application dashboard.
+     *
+     * @param Request $request
+     *
+     * @return string
+     */
+    public function updatebooks(Request $request)
+    {
+
+        $rules = array (
+                'fname' => 'required|alpha'
+        );
+        $validator = Validator::make ( Input::all (), $rules );
+        if ($validator->fails ())
+            return Response::json ( array (             
+                    'errors' => $validator->getMessageBag ()->toArray () 
+            ) );
+        else {
+            
+            $data = Book::find ( $request->id );
+            $data->name = ($request->fname);
+            $data->save ();
+            return response ()->json ( $data );
+        }
+
+        /*if($request)
+        {
+            $this->validate($request, [
+                'sportschk'   => 'required'
+            ]);
+
+            foreach($request->sportschk as $key=>$value)
+            {
+                $sport = new Sport;
+                $sport->saveSport( ['id' => $key, 'name' => $value] );
+            }
+        }
+        return redirect()->route('admin.db.sports');*/
+    }
+
+    /**
+     * Show the application dashboard.
+     *
+     * @param Request $request
+     *
+     * @return string
+     */
+    public function deletebooks(Request $request)
+    {
+
+
+        Book::find ( $request->id )->delete();
+        return response()->json();
+
     }
 
 

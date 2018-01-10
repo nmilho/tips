@@ -43,6 +43,7 @@ Route::prefix('admin')->group(function() {
   Route::get('/db/books', 'Db\DbController@books')->name('admin.db.books');
   Route::post('/db/books', 'Db\DbController@books')->name('admin.db.books');
   Route::post('/db/books/update', 'Db\DbController@updatebooks')->name('admin.db.updatebooks');
+  Route::post('/db/books/delete', 'Db\DbController@deletebooks')->name('admin.db.deletebooks');
 
   Route::get('/db/sports', 'Db\DbController@sports')->name('admin.db.sports');
 });

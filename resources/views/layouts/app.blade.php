@@ -11,17 +11,19 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Styles -->
-    <!-- Bootstrap Core CSS -->
-    <link href="{{ url('/').'/css/vendor/bootstrap/css/bootstrap.min.css' }}" rel="stylesheet">
+    <!-- Bootstrap Core CSS 
+    <link href="{{ url('/').'/css/vendor/bootstrap/css/bootstrap.min.css' }}" rel="stylesheet">-->
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 
     <!-- MetisMenu CSS -->
     <link href="{{ url('/').'/css/vendor/metisMenu/metisMenu.min.css' }}" rel="stylesheet">
 
-    <!-- DataTables CSS -->
-    <link href="{{ url('/').'/css/vendor/datatables-plugins/dataTables.bootstrap.css' }}" rel="stylesheet">
+    <!-- DataTables CSS 
+    <link href="{{ url('/').'/css/vendor/datatables-plugins/dataTables.bootstrap.css' }}" rel="stylesheet">-->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/dataTables.bootstrap.min.css">
 
-    <!-- DataTables Responsive CSS -->
-    <link href="{{ url('/').'/css/vendor/datatables-responsive/dataTables.responsive.css' }}" rel="stylesheet">
+    <!-- DataTables Responsive CSS 
+    <link href="{{ url('/').'/css/vendor/datatables-responsive/dataTables.responsive.css' }}" rel="stylesheet">-->
 
     <!-- Custom CSS -->
     <link href="{{ url('/').'/css/dist/css/sb-admin.css' }}" rel="stylesheet">
@@ -40,6 +42,10 @@
     <![endif]-->
 
     
+    
+    
+
+    
 </head>
 <body>
     <div id="wrapper">
@@ -50,10 +56,20 @@
         @yield('content')
         </div>
     </div>
+        @yield('modal')
 
     <!-- Scripts -->
-    <!-- jQuery -->
-    <script src="{{ url('/').'/css/vendor/jquery/jquery.min.js' }}"></script>
+    <!-- jQuery 
+    <script src="{{ url('/').'/css/vendor/jquery/jquery.min.js' }}"></script>-->
+    <script src="//code.jquery.com/jquery-1.12.3.js"></script>
+    
+
+    <!-- DataTables JavaScript 
+    <script src="{{ url('/').'/css/vendor/datatables/js/jquery.dataTables.min.js' }}"></script>
+    <script src="{{ url('/').'/css/vendor/datatables-plugins/dataTables.bootstrap.min.js' }}"></script>
+    <script src="{{ url('/').'/css/vendor/datatables-responsive/dataTables.responsive.js' }}"></script>-->
+    <script src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.12/js/dataTables.bootstrap.min.js"></script>
 
     <!-- Bootstrap Core JavaScript -->
     <script src="{{ url('/').'/css/vendor/bootstrap/js/bootstrap.min.js' }}"></script>
@@ -61,10 +77,7 @@
     <!-- Metis Menu Plugin JavaScript -->
     <script src="{{ url('/').'/css/vendor/metisMenu/metisMenu.min.js' }}"></script>
 
-    <!-- DataTables JavaScript -->
-    <script src="{{ url('/').'/css/vendor/datatables/js/jquery.dataTables.min.js' }}"></script>
-    <script src="{{ url('/').'/css/vendor/datatables-plugins/dataTables.bootstrap.min.js' }}"></script>
-    <script src="{{ url('/').'/css/vendor/datatables-responsive/dataTables.responsive.js' }}"></script>
+    
 
     <!-- Morris Charts JavaScript -->
     <script src="{{ url('/').'/css/vendor/raphael/raphael.min.js' }}"></script>
@@ -74,5 +87,6 @@
     <script src="{{ url('/').'/css/dist/js/sb-admin.js' }}"></script>
 
      <!-- Latest compiled JavaScript -->
+     @yield('actionscripts')
 </body>
 </html>

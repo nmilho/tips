@@ -71,7 +71,7 @@ class AdminController extends Controller
      *
      * @param Request $request
      *
-     * @return \Illuminate\Http\Response
+     * @return string
      */
     public function dbSportsUpdate(Request $request)
     {

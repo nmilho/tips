@@ -62,3 +62,8 @@ $(document).ready(function() {
         "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]
     } );
 } );
+
+function fillBookModalData (details){
+    $('#fid').val(details[0]);
+    $('#fname').val(details[1]);
+  }
