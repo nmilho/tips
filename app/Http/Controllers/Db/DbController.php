@@ -47,10 +47,13 @@ class DbController extends Controller
      */
     public function books()
     {
-        $radarurl = 'https://api.sportradar.us/oddscomparison-rowt1/en/eu/books.json?api_key=';
+        /*$radarurl = 'https://api.sportradar.us/oddscomparison-rowt1/en/eu/books.json?api_key=';
         $request = $radarurl.env('SPORTRADAR_KEY_ODD_ROW');
 
         $jsondata = file_get_contents($request);
+        $json = json_decode(utf8_decode($jsondata), true);*/
+
+        $jsondata = 'books.json'
         $json = json_decode(utf8_decode($jsondata), true);
 
         $books = collect($json['books']);
@@ -132,10 +135,12 @@ class DbController extends Controller
     public function sports()
     {
 
-        $radarurl = 'https://api.sportradar.us/oddscomparison-rowt1/en/eu/sports.json?api_key=';
+        /*$radarurl = 'https://api.sportradar.us/oddscomparison-rowt1/en/eu/sports.json?api_key=';
         $request = $radarurl.env('SPORTRADAR_KEY_ODD_ROW');
 
         $jsondata = file_get_contents($request);
+        $json = json_decode(utf8_decode($jsondata), true);*/
+        $jsondata = 'sports.json'
         $json = json_decode(utf8_decode($jsondata), true);
 
         $sports = collect($json['sports']);
