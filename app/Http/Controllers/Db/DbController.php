@@ -201,4 +201,92 @@ class DbController extends Controller
         return response()->json();
 
     }
+
+
+
+
+
+
+
+
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function categories()
+    {
+        /*$radarurl = 'https://api.sportradar.us/oddscomparison-rowt1/en/eu/sports/sr:sport:1/categories.json?api_key=';
+        $radarurl = 'https://api.sportradar.us/oddscomparison-rowt1/en/eu/categories.json?api_key=';
+        $request = $radarurl.env('CATEGORIERADAR_KEY_ODD_ROW');
+
+        $jsondata = file_get_contents($request);
+        $json = json_decode(utf8_decode($jsondata), true);*/
+        $path = storage_path().'\json\categories.json'; // ie: /var/www/laravel/app/storage/json/filename.json
+        
+        if (!File::exists($path)) {
+            return dd($path);
+        }
+
+        $file = File::get($path); // string
+        $json = json_decode(utf8_decode($file), true);
+
+        $categories = collect($json['categories']);
+        
+        $categoriesDb = Category::All();
+        $categoriesIdDb = $categoriesDb->pluck('id');
+
+        foreach($categoriesIdDb as $key => $value)
+            $categoriesIdDb[$key] = 'sr:category:'.$value;
+        
+        $categories = $categories->whereNotIn('id', $categoriesIdDb);
+
+        return view('admin.db.categories', ['categoriesDb' => $categoriesDb->sortBy('name'), 'categories' => $categories->sortBy('name')]);
+    }
+
+    /**
+     * Show the application dashboard.
+     *
+     * @param Request $request
+     *
+     * @return string
+     */
+    public function updatecategories(Request $request)
+    {
+        $rules = array (
+            'name' => 'required',
+            'sportid' => 'required',
+            'outrights' => 'required'
+        );
+
+        $validator = Validator::make ( $request->toArray(), $rules );
+
+        if ($validator->fails ())
+            return response()->json( array('errors' => $validator->getMessageBag()->toArray()) );
+
+        else {
+            if($request)
+            {
+                $category = new Category;
+                $res = $category->saveCategory( $request );
+                return response ()->json( $res );
+            }
+        }
+    }
+
+    /**
+     * Show the application dashboard.
+     *
+     * @param Request $request
+     *
+     * @return string
+     */
+    public function deletecategories(Request $request)
+    {
+
+
+        Category::find ( $request->id )->delete();
+        return response()->json();
+
+    }
 }

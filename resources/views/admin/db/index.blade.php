@@ -40,7 +40,7 @@
         </div>
 
         <div class="col-lg-3 col-md-6">
-            <a href="#">
+            <a href="{{ route('admin.db.categories') }}">
                 <div class="panel panel-primary">
                     <div class="panel-heading">
                         <div class="row">

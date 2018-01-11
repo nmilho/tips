@@ -16,6 +16,9 @@
                     <li>
                         <a href="{{ route('admin.db.sports') }}">Sports</a>
                     </li>
+                    <li>
+                        <a href="{{ route('admin.db.categories') }}">Categories</a>
+                    </li>
                 </ul>
                 <!-- /.nav-second-level -->
             </li>

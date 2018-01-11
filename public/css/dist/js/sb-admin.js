@@ -61,6 +61,13 @@ $(document).ready(function() {
     $('#dbSports').DataTable( {
         "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]
     } );
+
+    $('#radarCategories').DataTable( {
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]
+    } );
+    $('#dbCategories').DataTable( {
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]
+    } );
 } );
 
 
@@ -75,6 +82,14 @@ function fillBookModalData (details){
 function fillSportModalData (details){
     $('#fid').val(intval(details[0]));
     $('#fname').val(details[1]);
+}
+
+//Categories
+function fillCategoryModalData (details){
+    $('#fid').val(intval(details[0]));
+    $('#fname').val(details[1]);
+    $('#fsportid').val(intval(details[2]));
+    $('#foutrights').val(details[3]);
 }
 
 //*****END Filleng Models modal data

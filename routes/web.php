@@ -21,15 +21,6 @@ Route::prefix('admin')->group(function() {
   
   Route::get('/', 'AdminController@index')->name('admin.dashboard');
 
-  //Route::get('/db', 'AdminController@db')->name('admin.db');
-
-  //Route::get('/db/sports', 'AdminController@dbSports')->name('admin.db.sports');
-  //Route::post('/db/sports/update', 'AdminController@dbSportsUpdate')->name('admin.db.sportsupdate');
-
-  Route::get('/db/categories', 'AdminController@dbCategories')->name('admin.db.categories');
-  Route::post('/db/categories', 'AdminController@dbCategories')->name('admin.db.categories');
-  Route::post('/db/categories/update', 'AdminController@dbCategoriesUpdate')->name('admin.db.categoriesupdate');
-
   Route::get('/db/tournaments', 'AdminController@dbTournaments')->name('admin.db.tournaments');
   Route::post('/db/tournaments', 'AdminController@dbTournaments')->name('admin.db.tournaments');
   Route::post('/db/tournaments/update', 'AdminController@dbTournamentsUpdate')->name('admin.db.tournamentsupdate');
@@ -49,5 +40,10 @@ Route::prefix('admin')->group(function() {
   //Route::post('/db/sports', 'Db\DbController@sports')->name('admin.db.sports');
   Route::post('/db/sports/update', 'Db\DbController@updatesports')->name('admin.db.updatesports');
   Route::post('/db/sports/delete', 'Db\DbController@deletesports')->name('admin.db.deletesports');
+
+  Route::get('/db/categories', 'Db\DbController@categories')->name('admin.db.categories');
+  //Route::post('/db/categories', 'Db\DbController@categories')->name('admin.db.categories');
+  Route::post('/db/categories/update', 'Db\DbController@updatecategories')->name('admin.db.updatecategories');
+  Route::post('/db/categories/delete', 'Db\DbController@deletecategories')->name('admin.db.deletecategories');
 
 });
