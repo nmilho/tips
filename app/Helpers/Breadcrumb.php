@@ -22,15 +22,5 @@ class Breadcrumb {
 		
 
 		return $bc;
-
-					
-		/*		<ol class="breadcrumb">
-					<li><a href="/'.$value.'">'.$key.'</a></li>
-			        <li><a href="#">Library</a></li>
-				  	<li class="active">Data</li>
-			  	</ol>
-        */
-
-
     }
 }

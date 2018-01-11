@@ -31,12 +31,12 @@
                       <tbody>
                       @foreach($books as $book)
                           <tr>
-                              <td class="text-center">{{ $book['id'] }}</td>
+                              <td class="text-center">{{ filter_var($book['id'], FILTER_SANITIZE_NUMBER_INT) }}</td>
                               <td class="text-center">{{ $book['name'] }}</td>
                               <td class="text-center">
                                   <button class="save-modal btn btn-sm btn-success" 
                                       data-info="{{ $book['id'] }},{{ $book['name'] }}">
-                                      <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                                      <i class="fa fa-floppy-o" aria-hidden="true"></i> 
                                       Save
                                   </button>
                               </td>
@@ -72,7 +72,7 @@
                   <td class="text-center">{{ $book['name'] }}</td>
                   <td class="text-center"><button class="delete-modal btn btn-sm btn-danger"
                         data-info="{{ $book['id'] }},{{ $book['name'] }}">
-                        <span class="fa fa-trash"></span> 
+                        <i class="fa fa-trash" aria-hidden="true"></i> 
                         Delete
                     </button>
                   </td>
@@ -111,7 +111,7 @@
             <div class="form-group">
               <label class="control-label col-sm-2" for="fname">Name</label>
               <div class="col-sm-10">
-                <input type="name" class="form-control" id="fname"  >
+                <input type="name" class="form-control" id="fname" disabled="" >
               </div>
             </div>
             <p class="fname_error error text-center alert alert-danger hidden"></p>
@@ -121,10 +121,10 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn actionBtn" data-dismiss="modal">
-              <span id="footer_action_button" class="fa"> </span>
+              
             </button>
-            <button type="button" class="btn btn-warning" data-dismiss="modal">
-              <span class="fa fa-remove"></span> Close
+            <button id="delbtn" type="button" class="btn btn-warning" data-dismiss="modal">
+              <i class="fa fa-remove"></i> Close
             </button>
           </div>
         </div>
@@ -137,11 +137,8 @@
 
 <script>
   $(document).on('click', '.save-modal', function() {
-    $('#footer_action_button').show();
-    $('#footer_action_button').text(" Save");
-    $('#footer_action_button').addClass('fa-check');
-    $('#footer_action_button').removeClass('fa-trash-o');
-    $('.actionBtn').show();
+    $('.actionBtn').text('');
+    $('.actionBtn').append('<i class="fa fa-floppy-o"></i> Save');
     $('.actionBtn').addClass('btn-success');
     $('.actionBtn').removeClass('btn-danger');
     $('.actionBtn').removeClass('delete');
@@ -155,11 +152,8 @@
   });
 
   $(document).on('click', '.delete-modal', function() {
-    $('#footer_action_button').show();
-    $('#footer_action_button').text(" Delete");
-    $('#footer_action_button').removeClass('fa-check');
-    $('#footer_action_button').addClass('fa-trash-o');
-    $('.actionBtn').show();
+    $('.actionBtn').text('');
+    $('.actionBtn').append('<i class="fa fa-trash-o"></i> Delete');
     $('.actionBtn').removeClass('btn-success');
     $('.actionBtn').addClass('btn-danger');
     $('.actionBtn').removeClass('save');
@@ -177,15 +171,14 @@
 
   $('.modal-footer').on('click', '.delete', function() {
         $.ajax({
-            type: 'post',
+            type: "POST",
+            headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}'},
             url: '{{ route('admin.db.deletebooks') }}',
             data: {
-                '_token': $('input[name=_token]').val(),
                 'id': $('.did').text()
             },
             success: function(data) {
-              alert($('.did').text());
-                $('.item' + $('.did').text()).remove();
+                location.reload();
             }
         });
     });
@@ -210,13 +203,9 @@
                       $('.fname_error').text(data.errors.name);
                   }
                 }
-                else {
-                   
-                   $('.error').addClass('hidden');
-                $('.item' + data.id).replaceWith("<tr class='item" + data.id + "'><td>" +
-                data.id + "</td><td>" + data.name +
-                "</td><td><button class='edit-modal btn btn-info' data-info='" + data.id+","+data.name+"'><span class='glyphicon glyphicon-edit'></span> Edit</button> <button class='delete-modal btn btn-danger' data-info='" + data.id+","+data.name+"' ><span class='glyphicon glyphicon-trash'></span> Delete</button></td></tr>");
-                location.reload();
+                else {                   
+                    $('.error').addClass('hidden');
+                    location.reload();
                 }
             },
             error: function(request, status, error) {

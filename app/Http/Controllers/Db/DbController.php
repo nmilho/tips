@@ -13,6 +13,7 @@ use App\Book;
 use App\Http\Controllers\Controller;
 use File;
 use Validator;
+use IntVal;
 
 class DbController extends Controller
 {
@@ -75,6 +76,7 @@ class DbController extends Controller
         
         $books = $books->whereNotIn('id', $booksIdDb);
 
+        
         return view('admin.db.books', ['booksDb' => $booksDb->sortBy('name'), 'books' => $books->sortBy('name')]);
     }
 
@@ -115,11 +117,8 @@ class DbController extends Controller
      */
     public function deletebooks(Request $request)
     {
-
-
         Book::find ( $request->id )->delete();
         return response()->json();
-
     }
 
 

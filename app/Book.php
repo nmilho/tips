@@ -10,7 +10,7 @@ class Book extends Model
 
     public function saveBook($data)
 	{
-		$data['id'] = ( (!strtok($data['id'], ':').strtok(':')) ? strtok(':') : $data['id'] );
+		$data['id'] = filter_var($data['id'], FILTER_SANITIZE_NUMBER_INT);
 
 		$book = Book::find($data['id']);
 
