@@ -10,6 +10,8 @@ class Sport extends Model
 
     public function saveSport($data)
 	{
+		$data['id'] = ( (!strtok($data['id'], ':').strtok(':')) ? strtok(':') : $data['id'] );
+		
 		$sport = Sport::find($data['id']);
 
 		if($sport == null)

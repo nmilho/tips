@@ -87,23 +87,16 @@ class DbController extends Controller
      */
     public function updatebooks(Request $request)
     {
-        //return response()->json(['response' => 'This is get method']);
-        /*$data = $request;
-        return response ()->json ( $data );*/
         $rules = array (
             'name' => 'required'
         );
 
-        //return response()->json($request->toArray());
-
         $validator = Validator::make ( $request->toArray(), $rules );
-        //return response ()->json ( $validator->fails() );
+
         if ($validator->fails ())
             return response()->json( array('errors' => $validator->getMessageBag()->toArray()) );
 
         else {
-
-
             if($request)
             {
                 $book = new Book;
@@ -111,38 +104,6 @@ class DbController extends Controller
                 return response ()->json( $res );
             }
         }
-        //return redirect()->route('admin.db.sports');*/
-
-        /*
-        $rules = array (
-                'fname' => 'required|alpha'
-        );
-        $validator = Validator::make ( Input::all (), $rules );
-        if ($validator->fails ())
-            return Response::json ( array (             
-                    'errors' => $validator->getMessageBag ()->toArray () 
-            ) );
-        else {
-            
-            $data = Book::find ( $request->id );
-            $data->name = ($request->fname);
-            $data->save ();
-            return response ()->json ( $data );
-        }
-
-        /*if($request)
-        {
-            $this->validate($request, [
-                'sportschk'   => 'required'
-            ]);
-
-            foreach($request->sportschk as $key=>$value)
-            {
-                $sport = new Sport;
-                $sport->saveSport( ['id' => $key, 'name' => $value] );
-            }
-        }
-        return redirect()->route('admin.db.sports');*/
     }
 
     /**
@@ -162,6 +123,8 @@ class DbController extends Controller
     }
 
 
+    
+
     /**
      * Show the application dashboard.
      *
@@ -169,7 +132,6 @@ class DbController extends Controller
      */
     public function sports()
     {
-
         /*$radarurl = 'https://api.sportradar.us/oddscomparison-rowt1/en/eu/sports.json?api_key=';
         $request = $radarurl.env('SPORTRADAR_KEY_ODD_ROW');
 
@@ -182,7 +144,6 @@ class DbController extends Controller
         }
 
         $file = File::get($path); // string
-        //return dd($file);
         $json = json_decode(utf8_decode($file), true);
 
         $sports = collect($json['sports']);
@@ -196,5 +157,49 @@ class DbController extends Controller
         $sports = $sports->whereNotIn('id', $sportsIdDb);
 
         return view('admin.db.sports', ['sportsDb' => $sportsDb->sortBy('name'), 'sports' => $sports->sortBy('name')]);
+    }
+
+    /**
+     * Show the application dashboard.
+     *
+     * @param Request $request
+     *
+     * @return string
+     */
+    public function updatesports(Request $request)
+    {
+        $rules = array (
+            'name' => 'required'
+        );
+
+        $validator = Validator::make ( $request->toArray(), $rules );
+
+        if ($validator->fails ())
+            return response()->json( array('errors' => $validator->getMessageBag()->toArray()) );
+
+        else {
+            if($request)
+            {
+                $sport = new Sport;
+                $res = $sport->saveSport( $request );
+                return response ()->json( $res );
+            }
+        }
+    }
+
+    /**
+     * Show the application dashboard.
+     *
+     * @param Request $request
+     *
+     * @return string
+     */
+    public function deletesports(Request $request)
+    {
+
+
+        Sport::find ( $request->id )->delete();
+        return response()->json();
+
     }
 }

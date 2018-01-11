@@ -24,19 +24,12 @@
           <table id="radarSports" class="table table-striped table-bordered table-hover">
             <thead>
               <tr>
-                <th>All</th>
                 <th>Id</th>
                 <th>Name</th>
               </tr>
             </thead>
             <tbody>
-            @foreach($sports as $sport)
-              <tr>
-                <td>1</td>
-                <td>{{ $sport['id'] }}</td>
-                <td>{{ $sport['name'] }}</td>
-              </tr>
-            @endforeach
+
             </tbody>
           </table>
         </div>  
@@ -57,7 +50,6 @@
           <table id="dbSports" class="table table-striped table-bordered table-hover">
             <thead>
               <tr>
-                <th>All</th>
                 <th>Id</th>
                 <th>Name</th>
               </tr>
@@ -65,7 +57,6 @@
             <tbody>
             @foreach($sportsDb as $sportdb)
               <tr>
-                <td>1</td>
                 <td>{{ $sportdb['id'] }}</td>
                 <td>{{ $sportdb['name'] }}</td>
               </tr>
@@ -79,4 +70,31 @@
   </div>
 </div>
 <!-- /.row -->
+@endsection
+
+
+
+
+
+
+
+
+
+@section('actionscripts')
+
+<script>
+
+    $('#radarSports').DataTable( {
+        "ajax": "{{ 'admin.db.sports.json' }}",
+        "columns": [
+            { "data": "id" },
+            { "data": "name" }
+        ]
+    } );
+
+    $('#dbSports').DataTable( {
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]
+  } );
+</script>
+
 @endsection

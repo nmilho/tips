@@ -48,13 +48,6 @@ $(function() {
 
 
 $(document).ready(function() {
-    $('#radarSports').DataTable( {
-        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]
-    } );
-    $('#dbSports').DataTable( {
-        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]
-    } );
-
     $('#radarBooks').DataTable( {
         "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]
     } );
@@ -63,10 +56,22 @@ $(document).ready(function() {
     } );
 } );
 
+
+//Filleng Models modal data
+//Books
 function fillBookModalData (details){
     $('#fid').val(intval(details[0]));
     $('#fname').val(details[1]);
 }
+
+//Sports
+function fillSportModalData (details){
+    $('#fid').val(intval(details[0]));
+    $('#fname').val(details[1]);
+}
+
+//*****END Filleng Models modal data
+
 
 function intval(string)
 {    

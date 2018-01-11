@@ -46,5 +46,18 @@ Route::prefix('admin')->group(function() {
   Route::post('/db/books/delete', 'Db\DbController@deletebooks')->name('admin.db.deletebooks');
 
   Route::get('/db/sports', 'Db\DbController@sports')->name('admin.db.sports');
+  Route::get('/db/sports/json', function() {
+      $path = storage_path().'\json\sports.json'; // ie: /var/www/laravel/app/storage/json/filename.json
+        
+      if (!File::exists($path)) {
+          return dd($path);
+      }
+
+      $file = File::get($path); // string
+      $json = json_decode(utf8_decode($file), true);
+
+      $sports = collect($json['sports']);
+      return $sports;
+  })->name('admin.db.sports.json');
 
 });
