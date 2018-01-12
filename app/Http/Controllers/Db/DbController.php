@@ -310,7 +310,7 @@ class DbController extends Controller
      */
     public function test()
     {
-        $path = storage_path().'\json\categories.json'; // ie: /var/www/laravel/app/storage/json/filename.json
+        $path = storage_path().'\json\schedule.json'; // ie: /var/www/laravel/app/storage/json/filename.json
         
         if (!File::exists($path)) {
             return dd($path);
@@ -319,20 +319,38 @@ class DbController extends Controller
         $file = File::get($path); // string
         $json = json_decode(utf8_decode($file), true);
 
-        $categories = collect($json['categories']);
-        
-        $sportsDb = Sport::All();
-        $sportsIdDb = $sportsDb->pluck('id');
+        $jsmatches = collect($json['sport_events']);
 
-        $sid = 'sr:sport:1';
-        $sport = $sportsDb->find($sid);
-        $id = $sport->id;
-        $soccer = $categories->where('sport_id', $id);
+        $path = storage_path().'\json\tournaments.json'; // ie: /var/www/laravel/app/storage/json/filename.json
+        
+        if (!File::exists($path)) {
+            return dd($path);
+        }
+
+        $file = File::get($path); // string
+        $json = json_decode(utf8_decode($file), true);
+
+        $jstournaments = collect($json['tournaments']);
+
+
+        $json_sport_id = 'sr:sport:1';
+        $dbsports = Sport::All();
+        $dbsport = $dbsports->find($json_sport_id);
+        $dbid = $dbsport->id;
+
+        $json_category_id = 'sr:category:1';
+        $json_season_id = 'sr:season:1';
+
+        $tournaments = Tournament::All()->where('category_id', $json_category_id);
+
+        $matches = Match::All()->whereIn('tournament_id', $tournaments->pluck('id'));
+
+
+        //TODO:: Continue with testing passing a radar id to the model and get it through accessors and mutator
+
         $data = [
-            'sid' => $sid,
-            'sport' => $sport,
-            'id' => $id,
-            'soccer' => $soccer
+            'tournaments' => Tournament::All()->where('category_id', $json_category_id),
+            'matches' => Match::All()->whereIn('tournament_id', $tournaments->pluck('id'))
         ];
         return dd($data);
 
