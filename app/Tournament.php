@@ -9,6 +9,127 @@ class Tournament extends Model
     protected $fillable = ['id', 'name', 'sport_id', 'category_id', 'season_id'];
 
 
+    /**
+     * Returns the id as it cames from radar
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function getIdAttribute($value)
+    {
+        return 'sr:tournament:'.$value;
+    }
+
+    /**
+     * Set the id as integer (without the xx:xxxxxx part)
+     *
+     * @param  string  $value
+     * @return void
+     */
+    public function setIdAttribute($value)
+    {
+        $this->attributes['id'] = filter_var($value, FILTER_SANITIZE_NUMBER_INT);
+    }
+
+
+    /**
+     * Returns the id as it cames from radar
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function getSportIdAttribute($value)
+    {
+        return 'sr:sport:'.$value;
+    }
+
+    /**
+     * Set the id as integer (without the xx:xxxxxx part)
+     *
+     * @param  string  $value
+     * @return void
+     */
+    public function setSportIdAttribute($value)
+    {
+        $this->attributes['sport_id'] = filter_var($value, FILTER_SANITIZE_NUMBER_INT);
+    }
+
+
+    /**
+     * Returns the id as it cames from radar
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function getCategoryIdAttribute($value)
+    {
+        return 'sr:category:'.$value;
+    }
+
+    /**
+     * Set the id as integer (without the xx:xxxxxx part)
+     *
+     * @param  string  $value
+     * @return void
+     */
+    public function setCategoryIdAttribute($value)
+    {
+        $this->attributes['category_id'] = filter_var($value, FILTER_SANITIZE_NUMBER_INT);
+    }
+
+
+    /**
+     * Returns the id as it cames from radar
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function getSeasonIdAttribute($value)
+    {
+        return 'sr:season:'.$value;
+    }
+
+    /**
+     * Set the id as integer (without the xx:xxxxxx part)
+     *
+     * @param  string  $value
+     * @return void
+     */
+    public function setSeasonIdAttribute($value)
+    {
+        $this->attributes['season_id'] = filter_var($value, FILTER_SANITIZE_NUMBER_INT);
+    }
+
+
+
+
+    /**
+     * Get the season record associated with the match.
+     */
+    public function season()
+    {
+        return $this->belongsTo('App\Season');
+    }
+
+    /**
+     * Get the sport record associated with the match.
+     */
+    public function sport()
+    {
+        return $this->belongsTo('App\Sport');
+    }
+
+    /**
+     * Get the category record associated with the match.
+     */
+    public function category()
+    {
+        return $this->belongsTo('App\Category');
+    }
+    
+
+
+
     public function saveTournament($data)
 	{
 		$data['id'] = ( (!strtok($data['id'], ':').strtok(':')) ? strtok(':') : $data['id'] ) ;

@@ -54,4 +54,8 @@ Route::prefix('admin')->group(function() {
   Route::post('/db/categories/update', 'Db\DbController@updatecategories')->name('admin.db.updatecategories');
   Route::post('/db/categories/delete', 'Db\DbController@deletecategories')->name('admin.db.deletecategories');
 
+
+
+  Route::get('/db/test', 'Db\DbController@test')->name('admin.db.test');
+
 });

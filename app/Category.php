@@ -8,6 +8,63 @@ class Category extends Model
 {
     protected $fillable = ['id', 'name', 'country_code', 'outrights', 'sport_id'];
 
+    /**
+     * Returns the id as it cames from radar
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function getIdAttribute($value)
+    {
+        return 'sr:category:'.$value;
+    }
+
+    /**
+     * Set the id as integer (without the xx:xxxxxx part)
+     *
+     * @param  string  $value
+     * @return void
+     */
+    public function setIdAttribute($value)
+    {
+        $this->attributes['id'] = filter_var($value, FILTER_SANITIZE_NUMBER_INT);
+    }
+
+    /**
+     * Returns the sport_id as it cames from radar
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function getSportIdAttribute($value)
+    {
+        return 'sr:sport:'.$value;
+    }
+
+    /**
+     * Set the sport_id as integer (without the xx:xxxxxx part)
+     *
+     * @param  string  $value
+     * @return void
+     */
+    public function setSportIdAttribute($value)
+    {
+        $this->attributes['sport_id'] = filter_var($value, FILTER_SANITIZE_NUMBER_INT);
+    }
+
+
+
+
+    /**
+     * Get the sport record associated with the match.
+     */
+    public function sport()
+    {
+        return $this->belongsTo('App\Sport');
+    }
+
+
+
 
     public function saveCategory($data)
 	{

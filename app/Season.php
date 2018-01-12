@@ -7,6 +7,31 @@ use Illuminate\Database\Eloquent\Model;
 class Season extends Model
 {
     protected $fillable = ['id', 'name', 'start_date', 'end_date', 'year'];
+
+    /**
+     * Returns the id as it cames from radar
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function getIdAttribute($value)
+    {
+        return 'sr:season:'.$value;
+    }
+
+    /**
+     * Set the id as integer (without the xx:xxxxxx part)
+     *
+     * @param  string  $value
+     * @return void
+     */
+    public function setIdAttribute($value)
+    {
+        $this->attributes['id'] = filter_var($value, FILTER_SANITIZE_NUMBER_INT);
+    }
+
+    
+
     public function saveSeason($data)
 	{
 		$data['id'] = ( (!strtok($data['id'], ':').strtok(':')) ? strtok(':') : $data['id'] ) ;

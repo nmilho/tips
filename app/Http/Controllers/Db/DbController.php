@@ -289,4 +289,58 @@ class DbController extends Controller
         return response()->json();
 
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function test()
+    {
+        $path = storage_path().'\json\categories.json'; // ie: /var/www/laravel/app/storage/json/filename.json
+        
+        if (!File::exists($path)) {
+            return dd($path);
+        }
+
+        $file = File::get($path); // string
+        $json = json_decode(utf8_decode($file), true);
+
+        $categories = collect($json['categories']);
+        
+        $sportsDb = Sport::All();
+        $sportsIdDb = $sportsDb->pluck('id');
+
+        $sid = 'sr:sport:1';
+        $sport = $sportsDb->find($sid);
+        $id = $sport->id;
+        $soccer = $categories->where('sport_id', $id);
+        $data = [
+            'sid' => $sid,
+            'sport' => $sport,
+            'id' => $id,
+            'soccer' => $soccer
+        ];
+        return dd($data);
+
+        /*foreach($categoriesIdDb as $key => $value)
+            $categoriesIdDb[$key] = 'sr:category:'.$value;
+        
+        $categories = $categories->whereNotIn('id', $categoriesIdDb);
+
+        return view('admin.db.categories', ['categoriesDb' => $categoriesDb->sortBy('name'), 'categories' => $categories->sortBy('name')]);*/
+    }
 }
