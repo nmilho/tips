@@ -31,7 +31,7 @@
                       <tbody>
                       @foreach($sports as $sport)
                           <tr>
-                              <td class="text-center">{{ filter_var($sport['id'], FILTER_SANITIZE_NUMBER_INT) }}</td>
+                              <td class="text-center">{{ $sport['id'] }}</td>
                               <td class="text-center">{{ $sport['name'] }}</td>
                               <td class="text-center">
                                   <button class="save-modal btn btn-sm btn-success" 
@@ -177,8 +177,21 @@
             data: {
                 'id': $('.did').text()
             },
-            success: function(data) {
-                location.reload();
+            success: function( data, status, error ) {
+                console.log('success');
+                console.log('Data => ' + JSON.stringify(data));
+                console.log('Status => ' + status);
+                console.log('Error => ' + JSON.stringify(error, null, 2));
+                //location.reload();
+            },
+            error: function(request, status, error) {
+              console.log('error');
+                //console.log('Data => ' + JSON.stringify(data));
+                console.log('Request->message => ' + request.responseJSON['message']);
+                console.log('Status => ' + status);
+                //console.log('Error => ' + JSON.stringify(error, null, 2));
+                console.log('Error => ' + error);
+                //location.reload();
             }
         });
     });

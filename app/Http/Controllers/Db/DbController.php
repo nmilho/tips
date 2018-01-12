@@ -117,8 +117,8 @@ class DbController extends Controller
      */
     public function deletebooks(Request $request)
     {
-        Book::find ( $request->id )->delete();
-        return response()->json();
+        $res = Book::find ( $request->id )->delete();
+        return response()->json($res);
     }
 
 
@@ -197,8 +197,8 @@ class DbController extends Controller
     {
 
 
-        Sport::find ( $request->id )->delete();
-        return response()->json();
+        $res = Sport::find ( $request->id )->delete();
+        return response()->json($res);
 
     }
 
@@ -236,10 +236,9 @@ class DbController extends Controller
         $categoriesDb = Category::All();
         $categoriesIdDb = $categoriesDb->pluck('id');
 
-        foreach($categoriesIdDb as $key => $value)
-            $categoriesIdDb[$key] = 'sr:category:'.$value;
         
         $categories = $categories->whereNotIn('id', $categoriesIdDb);
+        $categories = $categories->where('country_code', !null);
 
         return view('admin.db.categories', ['categoriesDb' => $categoriesDb->sortBy('name'), 'categories' => $categories->sortBy('name')]);
     }
@@ -255,7 +254,7 @@ class DbController extends Controller
     {
         $rules = array (
             'name' => 'required',
-            'sportid' => 'required',
+            'sport_id' => 'required',
             'outrights' => 'required'
         );
 
@@ -284,19 +283,10 @@ class DbController extends Controller
     public function deletecategories(Request $request)
     {
 
-
-        Category::find ( $request->id )->delete();
-        return response()->json();
+        $res = Category::All()->find($request->id )->delete();
+        return response()->json($res);
 
     }
-
-
-
-
-
-
-
-
 
 
 

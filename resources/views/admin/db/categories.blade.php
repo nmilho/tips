@@ -24,6 +24,7 @@
                           <tr>
                               <th class="text-center">Id</th>
                               <th class="text-center">Name</th>
+                              <th class="text-center">Code</th>
                               <th class="text-center">SportId</th>
                               <th class="text-center">Outrights</th>
                               <th class="text-center">Actions</th>
@@ -33,13 +34,14 @@
                       <tbody>
                       @foreach($categories as $category)
                           <tr>
-                              <td class="text-center">{{ filter_var($category['id'], FILTER_SANITIZE_NUMBER_INT) }}</td>
+                              <td class="text-center">{{ $category['id'] }}</td>
                               <td class="text-center">{{ $category['name'] }}</td>
+                              <td class="text-center">{{ $category['country_code'] }}</td>
                               <td class="text-center">{{ $category['sport_id'] }}</td>
                               <td class="text-center">{{ $category['outrights'] }}</td>
                               <td class="text-center">
                                   <button class="save-modal btn btn-sm btn-success" 
-                                      data-info="{{ $category['id'] }},{{ $category['name'] }},{{ $category['sport_id'] }},{{ $category['outrights'] }}">
+                                      data-info="{{ $category['id'] }},{{ $category['name'] }},{{ $category['country_code'] }},{{ $category['sport_id'] }},{{ $category['outrights'] }}">
                                       <i class="fa fa-floppy-o" aria-hidden="true"></i> 
                                       Save
                                   </button>
@@ -66,6 +68,7 @@
                 <tr>
                   <th class="text-center">Id</th>
                   <th class="text-center">Name</th>
+                  <th class="text-center">Code</th>
                   <th class="text-center">SportId</th>
                   <th class="text-center">Outrights</th>
                   <th class="text-center">Actions</th>
@@ -76,10 +79,11 @@
                 <tr>
                   <td class="text-center">{{ $category['id'] }}</td>
                   <td class="text-center">{{ $category['name'] }}</td>
+                  <td class="text-center">{{ $category['country_code'] }}</td>
                   <td class="text-center">{{ $category['sport_id'] }}</td>
                   <td class="text-center">{{ $category['outrights'] }}</td>
                   <td class="text-center"><button class="delete-modal btn btn-sm btn-danger"
-                        data-info="{{ $category['id'] }},{{ $category['name'] }},{{ $category['sport_id'] }},{{ $category['outrights'] }}">
+                        data-info="{{ $category['id'] }},{{ $category['name'] }},{{ $category['country_code'] }},{{ $category['sport_id'] }},{{ $category['outrights'] }}">
                         <i class="fa fa-trash" aria-hidden="true"></i> 
                         Delete
                     </button>
@@ -125,6 +129,14 @@
               </div>
             </div>
             <p class="fname_error error text-center alert alert-danger hidden"></p>
+
+            <div class="form-group">
+              <label class="control-label col-sm-2" for="fcountry">Country</label>
+              <div class="col-sm-10">
+                <input type="name" class="form-control" id="fcountry" disabled="" >
+              </div>
+            </div>
+            <p class="fcountry_error error text-center alert alert-danger hidden"></p>
 
             <div class="form-group">
               <label class="control-label col-sm-2" for="fsportid">SportId</label>
@@ -207,8 +219,21 @@
             data: {
                 'id': $('.did').text()
             },
-            success: function(data) {
-                location.reload();
+            success: function( data, status, error ) {
+                console.log('success');
+                console.log('Data => ' + JSON.stringify(data));
+                console.log('Status => ' + status);
+                console.log('Error => ' + JSON.stringify(error, null, 2));
+                //location.reload();
+            },
+            error: function(request, status, error) {
+              console.log('error');
+                //console.log('Data => ' + JSON.stringify(data));
+                console.log('Request->message => ' + request.responseJSON['message']);
+                console.log('Status => ' + status);
+                //console.log('Error => ' + JSON.stringify(error, null, 2));
+                console.log('Error => ' + error);
+                //location.reload();
             }
         });
     });
@@ -216,6 +241,7 @@
   $('.modal-footer').on('click', '.save', function() {
         var id = $("#fid").val();
         var name = $('#fname').val();
+        var country = $('#fcountry').val();
         var sportid = $('#fsportid').val();
         var outrights = $('#foutrights').val();
 
@@ -223,7 +249,7 @@
             type: "POST",
             headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}'},
             url: '{{ route('admin.db.updatecategories') }}',
-            data: {id: id, name: name, sportid: sportid, outrights: outrights},
+            data: {id: id, name: name, country_code: country, sport_id: sportid, outrights: outrights},
             success: function( data, status, error ) {
                 /*console.log('Data => ' + JSON.stringify(data));
                 console.log('Status => ' + status);
