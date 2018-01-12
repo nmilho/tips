@@ -20,7 +20,7 @@
                     </div>
 
 
-                    <form class="form-horizontal" method="POST" action="{{ route('admin.db.sportsupdate') }}">
+                    <form class="form-horizontal" method="POST" action="{{ route('admin.db.dbsportsupdate') }}">
 
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">  
                        

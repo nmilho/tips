@@ -7,7 +7,7 @@
             <div class="col-md-12">
                 <div class="filters">
                     
-                    <form class="form-horizontal" method="POST" action="{{ route('admin.db.categories') }}">
+                    <form class="form-horizontal" method="POST" action="{{ route('admin.db.dbcategories') }}">
 
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                        
@@ -43,7 +43,7 @@
 
                     @if(isset($cats))
 
-                    <form class="form-horizontal" method="POST" action="{{ route('admin.db.categoriesupdate') }}">
+                    <form class="form-horizontal" method="POST" action="{{ route('admin.db.dbcategoriesupdate') }}">
 
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">  
                        

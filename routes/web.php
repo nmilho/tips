@@ -21,13 +21,21 @@ Route::prefix('admin')->group(function() {
   
   Route::get('/', 'AdminController@index')->name('admin.dashboard');
 
-  Route::get('/db/tournaments', 'AdminController@dbTournaments')->name('admin.db.tournaments');
-  Route::post('/db/tournaments', 'AdminController@dbTournaments')->name('admin.db.tournaments');
-  Route::post('/db/tournaments/update', 'AdminController@dbTournamentsUpdate')->name('admin.db.tournamentsupdate');
+  Route::get('/db/dbsports', 'AdminController@dbSports')->name('admin.db.dbsports');
+  Route::post('/db/dbsports', 'AdminController@dbSports')->name('admin.db.dbsports');
+  Route::post('/db/dbsports/update', 'AdminController@dbSportsUpdate')->name('admin.db.dbsportsupdate');
 
-  Route::get('/db/matches', 'AdminController@dbMatches')->name('admin.db.matches');
-  Route::post('/db/matches', 'AdminController@dbMatches')->name('admin.db.matches');
-  Route::post('/db/matches/update', 'AdminController@dbMatchesUpdate')->name('admin.db.matchesupdate');
+  Route::get('/db/dbcategories', 'AdminController@dbCategories')->name('admin.db.dbcategories');
+  Route::post('/db/dbcategories', 'AdminController@dbCategories')->name('admin.db.dbcategories');
+  Route::post('/db/dbcategories/update', 'AdminController@dbCategoriesUpdate')->name('admin.db.dbcategoriesupdate');
+
+  Route::get('/db/dbtournaments', 'AdminController@dbTournaments')->name('admin.db.dbtournaments');
+  Route::post('/db/dbtournaments', 'AdminController@dbTournaments')->name('admin.db.dbtournaments');
+  Route::post('/db/dbtournaments/update', 'AdminController@dbTournamentsUpdate')->name('admin.db.dbtournamentsupdate');
+
+  Route::get('/db/dbmatches', 'AdminController@dbMatches')->name('admin.db.dbmatches');
+  Route::post('/db/dbmatches', 'AdminController@dbMatches')->name('admin.db.dbmatches');
+  Route::post('/db/dbmatches/update', 'AdminController@dbMatchesUpdate')->name('admin.db.dbmatchesupdate');
 
   Route::get('/db', 'Db\DbController@index')->name('admin.db.index');
 

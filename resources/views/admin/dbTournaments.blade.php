@@ -7,7 +7,7 @@
             <div class="col-md-12">
                 <div class="filters">
                     
-                    <form class="form-horizontal" method="POST" action="{{ route('admin.db.tournaments') }}">
+                    <form class="form-horizontal" method="POST" action="{{ route('admin.db.dbtournaments') }}">
 
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                        
@@ -59,7 +59,7 @@
 
                     @if(isset($tournaments))
 
-                    <form class="form-horizontal" method="POST" action="{{ route('admin.db.tournamentsupdate') }}">
+                    <form class="form-horizontal" method="POST" action="{{ route('admin.db.dbtournamentsupdate') }}">
 
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">  
                        

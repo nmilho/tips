@@ -7,7 +7,7 @@
             <div class="col-md-12">
                 <div class="filters">
                     
-                    <form class="form-horizontal" method="POST" action="{{ route('admin.db.matches') }}">
+                    <form class="form-horizontal" method="POST" action="{{ route('admin.db.dbmatches') }}">
 
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                        
@@ -75,7 +75,7 @@
 
                     @if(isset($matches))
 
-                    <form class="form-horizontal" method="POST" action="{{ route('admin.db.matchesupdate') }}">
+                    <form class="form-horizontal" method="POST" action="{{ route('admin.db.dbmatchesupdate') }}">
 
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">  
                         <input type="hidden" name="tournament_id" id="tournament_id" value="{{ $tournament_id }}">

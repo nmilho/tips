@@ -9,6 +9,9 @@ use App\Competitor;
 use App\Category;
 use App\Tournament;
 use App\Match;
+use App\Book;
+use App\Http\Controllers\Controller;
+use File;
 
 class AdminController extends Controller
 {
@@ -49,10 +52,19 @@ class AdminController extends Controller
      */
     public function dbSports()
     {
-        $jsonurl = 'https://api.sportradar.us/oddscomparison-rowt1/en/eu/sports.json?api_key='.env('SPORTRADAR_KEY_ODD_ROW');
+        /*$jsonurl = 'https://api.sportradar.us/oddscomparison-rowt1/en/eu/sports.json?api_key='.env('SPORTRADAR_KEY_ODD_ROW');
 
         $jsondata = file_get_contents($jsonurl);
-        $json = json_decode(utf8_decode($jsondata), true);
+        $json = json_decode(utf8_decode($jsondata), true);*/
+
+        $path = storage_path().'\json\sports.json'; // ie: /var/www/laravel/app/storage/json/filename.json
+
+        if (!File::exists($path)) {
+            return dd($path);
+        }
+
+        $file = File::get($path); // string
+        $json = json_decode(utf8_decode($file), true);
 
         $sports = collect($json['sports']);
         
@@ -87,7 +99,7 @@ class AdminController extends Controller
                 $sport->saveSport( ['id' => $key, 'name' => $value] );
             }
         }
-        return redirect()->route('admin.db.sports');
+        return redirect()->route('admin.db.dbsports');
     }
 
 
@@ -110,9 +122,18 @@ class AdminController extends Controller
         if($sport_id !== 0)
         {
 
-            $jsonurl = 'https://api.sportradar.us/oddscomparison-rowt1/en/eu/sports/sr:sport:'.$sport_id.'/categories.json?api_key='.env('SPORTRADAR_KEY_ODD_ROW');            
+            /*$jsonurl = 'https://api.sportradar.us/oddscomparison-rowt1/en/eu/sports/sr:sport:'.$sport_id.'/categories.json?api_key='.env('SPORTRADAR_KEY_ODD_ROW');            
             $jsondata = file_get_contents($jsonurl);
-            $json = json_decode(utf8_decode($jsondata), true);
+            $json = json_decode(utf8_decode($jsondata), true);*/
+
+            $path = storage_path().'\json\categories.json'; // ie: /var/www/laravel/app/storage/json/filename.json
+        
+            if (!File::exists($path)) {
+                return dd($path);
+            }
+
+            $file = File::get($path); // string
+            $json = json_decode(utf8_decode($file), true);
 
             $categories = collect((isset($json['categories']) ? $json['categories'] : null));
 
@@ -150,10 +171,19 @@ class AdminController extends Controller
     {
         if($request)
         {
-            $jsonurl = 'https://api.sportradar.us/oddscomparison-rowt1/en/eu/categories.json?api_key='.env('SPORTRADAR_KEY_ODD_ROW');  
+            /*$jsonurl = 'https://api.sportradar.us/oddscomparison-rowt1/en/eu/categories.json?api_key='.env('SPORTRADAR_KEY_ODD_ROW');  
 
             $jsondata = file_get_contents($jsonurl);
-            $json = json_decode(utf8_decode($jsondata), true);
+            $json = json_decode(utf8_decode($jsondata), true);*/
+
+            $path = storage_path().'\json\categories.json'; // ie: /var/www/laravel/app/storage/json/filename.json
+        
+            if (!File::exists($path)) {
+                return dd($path);
+            }
+
+            $file = File::get($path); // string
+            $json = json_decode(utf8_decode($file), true);
 
             $categories = collect((isset($json['categories']) ? $json['categories'] : null));
 
@@ -209,9 +239,18 @@ class AdminController extends Controller
             {
                 $categoryname = Category::find($category_id)->name;
 
-                $jsonurl = 'https://api.sportradar.us/oddscomparison-rowt1/en/eu/sports/sr:sport:'.$sport_id.'/tournaments.json?api_key='.env('SPORTRADAR_KEY_ODD_ROW');            
+                /*$jsonurl = 'https://api.sportradar.us/oddscomparison-rowt1/en/eu/sports/sr:sport:'.$sport_id.'/tournaments.json?api_key='.env('SPORTRADAR_KEY_ODD_ROW');            
                 $jsondata = file_get_contents($jsonurl);
-                $json = json_decode(utf8_decode($jsondata), true);
+                $json = json_decode(utf8_decode($jsondata), true);*/
+
+                $path = storage_path().'\json\tournaments.json'; // ie: /var/www/laravel/app/storage/json/filename.json
+        
+                if (!File::exists($path)) {
+                    return dd($path);
+                }
+
+                $file = File::get($path); // string
+                $json = json_decode(utf8_decode($file), true);
 
                 $tournaments = collect((isset($json['tournaments']) ? $json['tournaments'] : null));
 
@@ -255,9 +294,18 @@ class AdminController extends Controller
     {
         if($request)
         {
-            $jsonurl = 'https://api.sportradar.us/oddscomparison-rowt1/en/eu/tournaments.json?api_key='.env('SPORTRADAR_KEY_ODD_ROW');            
+            /*$jsonurl = 'https://api.sportradar.us/oddscomparison-rowt1/en/eu/tournaments.json?api_key='.env('SPORTRADAR_KEY_ODD_ROW');            
             $jsondata = file_get_contents($jsonurl);
-            $json = json_decode(utf8_decode($jsondata), true);
+            $json = json_decode(utf8_decode($jsondata), true);*/
+
+            $path = storage_path().'\json\tournaments.json'; // ie: /var/www/laravel/app/storage/json/filename.json
+    
+            if (!File::exists($path)) {
+                return dd($path);
+            }
+
+            $file = File::get($path); // string
+            $json = json_decode(utf8_decode($file), true);
 
             $tournaments = collect((isset($json['tournaments']) ? $json['tournaments'] : null));
 
@@ -332,9 +380,18 @@ class AdminController extends Controller
                 {
                     $tournamentname = Tournament::find($tournament_id)->name;
 
-                    $jsonurl = 'https://api.sportradar.us/oddscomparison-rowt1/en/eu/tournaments/sr:tournament:'.$tournament_id.'/schedule.json?api_key='.env('SPORTRADAR_KEY_ODD_ROW');            
+                    /*$jsonurl = 'https://api.sportradar.us/oddscomparison-rowt1/en/eu/tournaments/sr:tournament:'.$tournament_id.'/schedule.json?api_key='.env('SPORTRADAR_KEY_ODD_ROW');            
                     $jsondata = file_get_contents($jsonurl);
-                    $json = json_decode(utf8_decode($jsondata), true);
+                    $json = json_decode(utf8_decode($jsondata), true);*/
+
+                    $path = storage_path().'\json\matches.json'; // ie: /var/www/laravel/app/storage/json/filename.json
+            
+                    if (!File::exists($path)) {
+                        return dd($path);
+                    }
+
+                    $file = File::get($path); // string
+                    $json = json_decode(utf8_decode($file), true);
 
                     $matches = collect((isset($json['sport_events']) ? $json['sport_events'] : null));
 
@@ -387,9 +444,18 @@ class AdminController extends Controller
     {
         if($request)
         {
-            $jsonurl = 'https://api.sportradar.us/oddscomparison-rowt1/en/eu/tournaments/sr:tournament:'.$request->tournament_id.'/schedule.json?api_key='.env('SPORTRADAR_KEY_ODD_ROW');            
+            /*$jsonurl = 'https://api.sportradar.us/oddscomparison-rowt1/en/eu/tournaments/sr:tournament:'.$request->tournament_id.'/schedule.json?api_key='.env('SPORTRADAR_KEY_ODD_ROW');            
             $jsondata = file_get_contents($jsonurl);
-            $json = json_decode(utf8_decode($jsondata), true);
+            $json = json_decode(utf8_decode($jsondata), true);*/
+
+            $path = storage_path().'\json\matches.json'; // ie: /var/www/laravel/app/storage/json/filename.json
+    
+            if (!File::exists($path)) {
+                return dd($path);
+            }
+
+            $file = File::get($path); // string
+            $json = json_decode(utf8_decode($file), true);
 
             $matches = collect((isset($json['sport_events']) ? $json['sport_events'] : null));
 
@@ -430,10 +496,19 @@ class AdminController extends Controller
      */
     public function dbBooks()
     {
-        $jsonurl = 'https://api.sportradar.us/oddscomparison-rowt1/en/eu/books.json?api_key='.env('SPORTRADAR_KEY_ODD_ROW');
+        /*$jsonurl = 'https://api.sportradar.us/oddscomparison-rowt1/en/eu/books.json?api_key='.env('SPORTRADAR_KEY_ODD_ROW');
 
         $jsondata = file_get_contents($jsonurl);
-        $json = json_decode(utf8_decode($jsondata), true);
+        $json = json_decode(utf8_decode($jsondata), true);*/
+
+        $path = storage_path().'\json\books.json'; // ie: /var/www/laravel/app/storage/json/filename.json
+
+        if (!File::exists($path)) {
+            return dd($path);
+        }
+
+        $file = File::get($path); // string
+        $json = json_decode(utf8_decode($file), true);
 
         $booksRq = collect((isset($json['books']) ? $json['books'] : null));
         $booksDb = Book::All();
@@ -469,7 +544,7 @@ class AdminController extends Controller
                 $sport->saveSport( ['id' => $key, 'name' => $value] );
             }
         }
-        return redirect()->route('admin.db.sports');
+        return redirect()->route('admin.db.dbsports');
     }
 
 }
