@@ -74,6 +74,15 @@ $(document).ready(function() {
         "dom": '<"top left"l><"top right"f>rt<"bottom-top"i><"bottom"p><"clear">',
         "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]
     } );
+
+    $('#radarTournaments').DataTable( {
+        "dom": '<"top left"l><"top right"f>rt<"bottom-top"i><"bottom"p><"clear">',
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]
+    } );
+    $('#dbTournaments').DataTable( {
+        "dom": '<"top left"l><"top right"f>rt<"bottom-top"i><"bottom"p><"clear">',
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]
+    } );
 } );
 
 
@@ -97,6 +106,19 @@ function fillCategoryModalData (details){
     $('#fcountry').val(details[2]);
     $('#fsportid').val(details[3]);
     $('#foutrights').val(details[4]);
+}
+
+//Tournaments
+function fillTournamentModalData (details){
+    $('#fid').val(details[0]);
+    $('#fname').val(details[1]);
+    $('#fsport').val(details[2]);
+    $('#fcategory').val(details[3]);
+    $('#fseason').val(details[4]);
+    $('#fseasonname').val(details[5]);
+    $('#fseasonstart').val(details[6]);
+    $('#fseasonend').val(details[7]);
+    $('#fseasonyear').val(details[8]);
 }
 
 //*****END Filleng Models modal data

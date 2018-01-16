@@ -66,14 +66,15 @@ class DbController extends Controller
 
         $json = json_decode(utf8_decode($file), true);
 
-        $books = collect($json['books']);
+        for($i = 0; $i < count($json['books']); $i++)
+        {
+            $json['books'][$i]['id'] = filter_var($json['books'][$i]['id'], FILTER_SANITIZE_NUMBER_INT);
+        }
+        $books = Sport::hydrate($json['books']);
         
         $booksDb = Book::All();
         $booksIdDb = $booksDb->pluck('id');
 
-        foreach($booksIdDb as $key => $value)
-            $booksIdDb[$key] = 'sr:book:'.$value;
-        
         $books = $books->whereNotIn('id', $booksIdDb);
 
         
@@ -145,13 +146,14 @@ class DbController extends Controller
         $file = File::get($path); // string
         $json = json_decode(utf8_decode($file), true);
 
-        $sports = collect($json['sports']);
+        for($i = 0; $i < count($json['sports']); $i++)
+        {
+            $json['sports'][$i]['id'] = filter_var($json['sports'][$i]['id'], FILTER_SANITIZE_NUMBER_INT);
+        }
+        $sports = Sport::hydrate($json['sports']);
         
         $sportsDb = Sport::All();
         $sportsIdDb = $sportsDb->pluck('id');
-
-        foreach($sportsIdDb as $key => $value)
-            $sportsIdDb[$key] = 'sr:sport:'.$value;
         
         $sports = $sports->whereNotIn('id', $sportsIdDb);
 
@@ -207,8 +209,6 @@ class DbController extends Controller
 
 
 
-
-
     /**
      * Show the application dashboard.
      *
@@ -231,14 +231,21 @@ class DbController extends Controller
         $file = File::get($path); // string
         $json = json_decode(utf8_decode($file), true);
 
-        $categories = collect($json['categories']);
+
+        for($i = 0; $i < count($json['categories']); $i++)
+        {
+            $json['categories'][$i]['id'] = filter_var($json['categories'][$i]['id'], FILTER_SANITIZE_NUMBER_INT);
+            $json['categories'][$i]['sport_id'] = filter_var($json['categories'][$i]['sport_id'], FILTER_SANITIZE_NUMBER_INT);
+        }
+        $categories = Category::hydrate($json['categories']);
+
         
         $categoriesDb = Category::All();
         $categoriesIdDb = $categoriesDb->pluck('id');
 
         
         $categories = $categories->whereNotIn('id', $categoriesIdDb);
-        $categories = $categories->where('country_code', !null);
+        $categories = $categories->whereIn('sport_id', Sport::All()->pluck('id'));
 
         return view('admin.db.categories', ['categoriesDb' => $categoriesDb->sortBy('name'), 'categories' => $categories->sortBy('name')]);
     }
@@ -284,6 +291,115 @@ class DbController extends Controller
     {
 
         $res = Category::All()->find($request->id )->delete();
+        return response()->json($res);
+
+    }
+
+
+
+
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function tournaments()
+    {
+        /*$radarurl = 'https://api.sportradar.us/oddscomparison-rowt1/en/eu/sports.json?api_key=';
+        $request = $radarurl.env('SPORTRADAR_KEY_ODD_ROW');
+
+        $jsondata = file_get_contents($request);
+        $json = json_decode(utf8_decode($jsondata), true);*/
+        $path = storage_path().'\json\tournaments.json'; // ie: /var/www/laravel/app/storage/json/filename.json
+        
+        if (!File::exists($path)) {
+            return dd($path);
+        }
+
+        $file = File::get($path); // string
+        $json = json_decode(utf8_decode($file), true);
+        //return dd($json['tournaments']);
+
+        for($i = 0; $i < count($json['tournaments']); $i++)
+        {
+            $json['tournaments'][$i]['id'] = filter_var($json['tournaments'][$i]['id'], FILTER_SANITIZE_NUMBER_INT);
+            $json['tournaments'][$i]['category']['id'] = filter_var($json['tournaments'][$i]['category']['id'], FILTER_SANITIZE_NUMBER_INT);
+            $json['tournaments'][$i]['sport']['id'] = filter_var($json['tournaments'][$i]['sport']['id'], FILTER_SANITIZE_NUMBER_INT);
+            $json['tournaments'][$i]['current_season']['id'] = filter_var($json['tournaments'][$i]['current_season']['id'], FILTER_SANITIZE_NUMBER_INT);
+        }
+        $tournaments = Tournament::hydrate($json['tournaments']);
+
+        $tournamentsDb = Tournament::All();
+
+        $tournamentsIdDb = $tournamentsDb->pluck('id');
+
+        
+        $tournaments = $tournaments->whereNotIn('id', $tournamentsIdDb)->whereIn('category.id', Category::All()->pluck('id'));
+
+        return view('admin.db.tournaments', ['tournamentsDb' => $tournamentsDb->sortBy('name'), 'tournaments' => $tournaments->sortBy('name')]);
+    }
+
+    /**
+     * Show the application dashboard.
+     *
+     * @param Request $request
+     *
+     * @return string
+     */
+    public function updatetournaments(Request $request)
+    {
+        $rules = array (
+            'name' => 'required'
+        );
+
+        $validator = Validator::make ( $request->tournament, $rules );
+
+        if ($validator->fails ())
+            return response()->json( array('errors' => $validator->getMessageBag()->toArray()) );
+
+        else {
+            if($request)
+            {
+                $reqseason = $request->season;
+                $reqtour = $request->tournament;
+
+                if(Season::find($reqseason['id']))
+                {
+                    $tournament = Tournament::create($reqtour);
+                    $res = $tournament->save();
+                    return response ()->json( $res );
+                }
+                else 
+                {
+                    $season = Season::create($reqseason);
+                    $res = $season->save();
+                    if($res)
+                    {
+
+                        $tournament = Tournament::create($reqtour);
+                        $res = $tournament->save();
+                        return response ()->json( $res );
+                    }
+                    else 
+                    {
+                        return response ()->json( $res );
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Show the application dashboard.
+     *
+     * @param Request $request
+     *
+     * @return string
+     */
+    public function deletetournaments(Request $request)
+    {
+
+        $res = Tournament::find ( $request->id )->delete();
         return response()->json($res);
 
     }
@@ -343,12 +459,5 @@ class DbController extends Controller
             'matches' => Match::All()->whereIn('tournament_id', $tournaments->pluck('id'))
         ];
         return dd($data);
-
-        /*foreach($categoriesIdDb as $key => $value)
-            $categoriesIdDb[$key] = 'sr:category:'.$value;
-        
-        $categories = $categories->whereNotIn('id', $categoriesIdDb);
-
-        return view('admin.db.categories', ['categoriesDb' => $categoriesDb->sortBy('name'), 'categories' => $categories->sortBy('name')]);*/
     }
 }

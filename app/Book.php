@@ -9,17 +9,6 @@ class Book extends Model
     protected $fillable = ['id', 'name'];
 
     /**
-     * Returns the id as it cames from radar
-     *
-     * @param  string  $value
-     * @return string
-     */
-    public function getIdAttribute($value)
-    {
-        return 'sr:book:'.$value;
-    }
-
-    /**
      * Set the id as integer (without the xx:xxxxxx part)
      *
      * @param  string  $value
@@ -34,7 +23,7 @@ class Book extends Model
 
     public function saveBook($data)
 	{
-		$data['id'] = filter_var($data['id'], FILTER_SANITIZE_NUMBER_INT);
+		//$data['id'] = filter_var($data['id'], FILTER_SANITIZE_NUMBER_INT);
 
 		$book = Book::find($data['id']);
 

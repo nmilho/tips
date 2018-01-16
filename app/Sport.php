@@ -9,17 +9,6 @@ class Sport extends Model
     protected $fillable = ['id', 'name'];
 
     /**
-     * Returns the id as it cames from radar
-     *
-     * @param  string  $value
-     * @return string
-     */
-    public function getIdAttribute($value)
-    {
-        return 'sr:sport:'.$value;
-    }
-
-    /**
      * Set the id as integer (without the xx:xxxxxx part)
      *
      * @param  string  $value
@@ -31,8 +20,6 @@ class Sport extends Model
     }
 
 
-
-
     /**
      * Saves a sport to the database table (creats or updates)
      *
@@ -41,7 +28,7 @@ class Sport extends Model
      */
     public function saveSport($data)
 	{
-		$data['id'] = ( (!strtok($data['id'], ':').strtok(':')) ? strtok(':') : $data['id'] );
+		//$data['id'] = ( (!strtok($data['id'], ':').strtok(':')) ? strtok(':') : $data['id'] );
 		
 		$sport = Sport::find($data['id']);
 

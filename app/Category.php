@@ -9,17 +9,6 @@ class Category extends Model
     protected $fillable = ['id', 'name', 'country_code', 'outrights', 'sport_id'];
 
     /**
-     * Returns the id as it cames from radar
-     *
-     * @param  string  $value
-     * @return string
-     */
-    public function getIdAttribute($value)
-    {
-        return 'sr:category:'.$value;
-    }
-
-    /**
      * Set the id as integer (without the xx:xxxxxx part)
      *
      * @param  string  $value
@@ -30,16 +19,6 @@ class Category extends Model
         $this->attributes['id'] = filter_var($value, FILTER_SANITIZE_NUMBER_INT);
     }
 
-    /**
-     * Returns the sport_id as it cames from radar
-     *
-     * @param  string  $value
-     * @return string
-     */
-    public function getSportIdAttribute($value)
-    {
-        return 'sr:sport:'.$value;
-    }
 
     /**
      * Set the sport_id as integer (without the xx:xxxxxx part)
@@ -68,8 +47,8 @@ class Category extends Model
 
     public function saveCategory($data)
 	{
-        $data['id'] = ( (!strtok($data['id'], ':').strtok(':')) ? strtok(':') : $data['id'] ) ;
-        $data['sport_id'] = ( (!strtok($data['sport_id'], ':').strtok(':')) ? strtok(':') : $data['sport_id'] ) ;
+        /*$data['id'] = ( (!strtok($data['id'], ':').strtok(':')) ? strtok(':') : $data['id'] ) ;
+        $data['sport_id'] = ( (!strtok($data['sport_id'], ':').strtok(':')) ? strtok(':') : $data['sport_id'] ) ;*/
 		$category = Category::find($data['id']);
 
 		if($category == null)

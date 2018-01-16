@@ -10,17 +10,6 @@ class Tournament extends Model
 
 
     /**
-     * Returns the id as it cames from radar
-     *
-     * @param  string  $value
-     * @return string
-     */
-    public function getIdAttribute($value)
-    {
-        return 'sr:tournament:'.$value;
-    }
-
-    /**
      * Set the id as integer (without the xx:xxxxxx part)
      *
      * @param  string  $value
@@ -33,17 +22,6 @@ class Tournament extends Model
 
 
     /**
-     * Returns the id as it cames from radar
-     *
-     * @param  string  $value
-     * @return string
-     */
-    public function getSportIdAttribute($value)
-    {
-        return 'sr:sport:'.$value;
-    }
-
-    /**
      * Set the id as integer (without the xx:xxxxxx part)
      *
      * @param  string  $value
@@ -52,18 +30,6 @@ class Tournament extends Model
     public function setSportIdAttribute($value)
     {
         $this->attributes['sport_id'] = filter_var($value, FILTER_SANITIZE_NUMBER_INT);
-    }
-
-
-    /**
-     * Returns the id as it cames from radar
-     *
-     * @param  string  $value
-     * @return string
-     */
-    public function getCategoryIdAttribute($value)
-    {
-        return 'sr:category:'.$value;
     }
 
     /**
@@ -75,18 +41,6 @@ class Tournament extends Model
     public function setCategoryIdAttribute($value)
     {
         $this->attributes['category_id'] = filter_var($value, FILTER_SANITIZE_NUMBER_INT);
-    }
-
-
-    /**
-     * Returns the id as it cames from radar
-     *
-     * @param  string  $value
-     * @return string
-     */
-    public function getSeasonIdAttribute($value)
-    {
-        return 'sr:season:'.$value;
     }
 
     /**
@@ -132,10 +86,10 @@ class Tournament extends Model
 
     public function saveTournament($data)
 	{
-		$data['id'] = ( (!strtok($data['id'], ':').strtok(':')) ? strtok(':') : $data['id'] ) ;
+		/*$data['id'] = ( (!strtok($data['id'], ':').strtok(':')) ? strtok(':') : $data['id'] ) ;
         $data['sport']['id'] = ( (!strtok($data['sport']['id'], ':').strtok(':')) ? strtok(':') : $data['sport']['id'] ) ;
         $data['category']['id'] = ( (!strtok($data['category']['id'], ':').strtok(':')) ? strtok(':') : $data['category']['id'] ) ;
-        $data['current_season']['id'] = ( (!strtok($data['current_season']['id'], ':').strtok(':')) ? strtok(':') : $data['current_season']['id'] ) ;
+        $data['current_season']['id'] = ( (!strtok($data['current_season']['id'], ':').strtok(':')) ? strtok(':') : $data['current_season']['id'] ) ;*/
 		
 		$tournament = Tournament::find($data['id']);
 		if($tournament == null)

@@ -9,17 +9,6 @@ class Season extends Model
     protected $fillable = ['id', 'name', 'start_date', 'end_date', 'year'];
 
     /**
-     * Returns the id as it cames from radar
-     *
-     * @param  string  $value
-     * @return string
-     */
-    public function getIdAttribute($value)
-    {
-        return 'sr:season:'.$value;
-    }
-
-    /**
      * Set the id as integer (without the xx:xxxxxx part)
      *
      * @param  string  $value
@@ -34,7 +23,7 @@ class Season extends Model
 
     public function saveSeason($data)
 	{
-		$data['id'] = ( (!strtok($data['id'], ':').strtok(':')) ? strtok(':') : $data['id'] ) ;
+		//$data['id'] = ( (!strtok($data['id'], ':').strtok(':')) ? strtok(':') : $data['id'] ) ;
 		$season = Season::find($data['id']);
 		if($season == null)
 		{

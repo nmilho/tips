@@ -54,7 +54,10 @@ Route::prefix('admin')->group(function() {
   Route::post('/db/categories/update', 'Db\DbController@updatecategories')->name('admin.db.updatecategories');
   Route::post('/db/categories/delete', 'Db\DbController@deletecategories')->name('admin.db.deletecategories');
 
-
+  Route::get('/db/tournaments', 'Db\DbController@tournaments')->name('admin.db.tournaments');
+  //Route::post('/db/seasons', 'Db\DbController@seasons')->name('admin.db.seasons');
+  Route::post('/db/tournaments/update', 'Db\DbController@updatetournaments')->name('admin.db.updatetournaments');
+  Route::post('/db/tournaments/delete', 'Db\DbController@deletetournaments')->name('admin.db.deletetournaments');
 
   Route::get('/db/test', 'Db\DbController@test')->name('admin.db.test');
 
