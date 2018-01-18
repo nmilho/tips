@@ -6,22 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Match extends Model
 {
-    protected $fillable = ['id', 'scheduled', 'season_id', 'tournament_id', 'sport_id', 'category_id', 'competitor_home_id', 'competitor_away_id'];
+    protected $fillable = ['id', 'scheduled', 'start_time_tbd', 'status', 'tournament_round', 'season_id', 'tournament_id', 'sport_id', 'category_id', 'competitor_home_id', 'competitor_away_id'];
 
-
-
-
-
-    /**
-     * Returns the id as it cames from radar
-     *
-     * @param  string  $value
-     * @return string
-     */
-    public function getIdAttribute($value)
-    {
-        return 'sr:match:'.$value;
-    }
 
     /**
      * Set the id as integer (without the xx:xxxxxx part)
@@ -32,18 +18,6 @@ class Match extends Model
     public function setIdAttribute($value)
     {
         $this->attributes['id'] = filter_var($value, FILTER_SANITIZE_NUMBER_INT);
-    }
-
-
-    /**
-     * Returns the id as it cames from radar
-     *
-     * @param  string  $value
-     * @return string
-     */
-    public function getSportIdAttribute($value)
-    {
-        return 'sr:sport:'.$value;
     }
 
     /**
@@ -57,18 +31,6 @@ class Match extends Model
         $this->attributes['sport_id'] = filter_var($value, FILTER_SANITIZE_NUMBER_INT);
     }
 
-
-    /**
-     * Returns the id as it cames from radar
-     *
-     * @param  string  $value
-     * @return string
-     */
-    public function getCategoryIdAttribute($value)
-    {
-        return 'sr:category:'.$value;
-    }
-
     /**
      * Set the id as integer (without the xx:xxxxxx part)
      *
@@ -78,18 +40,6 @@ class Match extends Model
     public function setCategoryIdAttribute($value)
     {
         $this->attributes['category_id'] = filter_var($value, FILTER_SANITIZE_NUMBER_INT);
-    }
-
-
-    /**
-     * Returns the id as it cames from radar
-     *
-     * @param  string  $value
-     * @return string
-     */
-    public function getSeasonIdAttribute($value)
-    {
-        return 'sr:season:'.$value;
     }
 
     /**
@@ -103,41 +53,6 @@ class Match extends Model
         $this->attributes['season_id'] = filter_var($value, FILTER_SANITIZE_NUMBER_INT);
     }
 
-
-    /**
-     * Returns the id as it cames from radar
-     *
-     * @param  string  $value
-     * @return string
-     */
-    public function getTournamentIdAttribute($value)
-    {
-        return 'sr:tournament:'.$value;
-    }
-
-    /**
-     * Set the id as integer (without the xx:xxxxxx part)
-     *
-     * @param  string  $value
-     * @return void
-     */
-    public function setTournamentIdAttribute($value)
-    {
-        $this->attributes['tournament_id'] = filter_var($value, FILTER_SANITIZE_NUMBER_INT);
-    }
-
-
-    /**
-     * Returns the id as it cames from radar
-     *
-     * @param  string  $value
-     * @return string
-     */
-    public function getCompetitorHomeIdIdAttribute($value)
-    {
-        return 'sr:competitor:'.$value;
-    }
-
     /**
      * Set the id as integer (without the xx:xxxxxx part)
      *
@@ -147,17 +62,6 @@ class Match extends Model
     public function setCompetitorHomeIdIdAttribute($value)
     {
         $this->attributes['competitor_home_id'] = filter_var($value, FILTER_SANITIZE_NUMBER_INT);
-    }
-
-    /**
-     * Returns the id as it cames from radar
-     *
-     * @param  string  $value
-     * @return string
-     */
-    public function getCompetitorAwayIdIdAttribute($value)
-    {
-        return 'sr:competitor:id:'.$value;
     }
 
     /**
@@ -227,14 +131,14 @@ class Match extends Model
     
     public function saveMatch($data)
 	{
-		$data['id'] = ( (!strtok($data['id'], ':').strtok(':')) ? strtok(':') : $data['id'] );
+		/*$data['id'] = ( (!strtok($data['id'], ':').strtok(':')) ? strtok(':') : $data['id'] );
 		$data['tournament']['id'] = ( (!strtok($data['tournament']['id'], ':').strtok(':')) ? strtok(':') : $data['tournament']['id'] );
         $data['tournament']['sport']['id'] = ( (!strtok($data['tournament']['sport']['id'], ':').strtok(':')) ? strtok(':') : $data['tournament']['sport']['id'] );
         $data['season']['id'] = ( (!strtok($data['season']['id'], ':').strtok(':')) ? strtok(':') : $data['season']['id'] );
         $data['tournament']['category']['id'] = ( (!strtok($data['tournament']['category']['id'], ':').strtok(':')) ? strtok(':') : $data['tournament']['category']['id'] );
 
         $data['competitors'][0]['id'] = ( (!strtok($data['competitors'][0]['id'], ':').strtok(':')) ? strtok(':') : $data['competitors'][0]['id'] );
-        $data['competitors'][1]['id'] = ( (!strtok($data['competitors'][1]['id'], ':').strtok(':')) ? strtok(':') : $data['competitors'][1]['id'] );
+        $data['competitors'][1]['id'] = ( (!strtok($data['competitors'][1]['id'], ':').strtok(':')) ? strtok(':') : $data['competitors'][1]['id'] );*/
 
 		$match = Match::find($data['id']);
 

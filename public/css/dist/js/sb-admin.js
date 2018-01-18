@@ -83,6 +83,15 @@ $(document).ready(function() {
         "dom": '<"top left"l><"top right"f>rt<"bottom-top"i><"bottom"p><"clear">',
         "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]
     } );
+
+    $('#radarMatches').DataTable( {
+        "dom": '<"top left"l><"top right"f>rt<"bottom-top"i><"bottom"p><"clear">',
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]
+    } );
+    $('#dbMatches').DataTable( {
+        "dom": '<"top left"l><"top right"f>rt<"bottom-top"i><"bottom"p><"clear">',
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]
+    } );
 } );
 
 
@@ -119,6 +128,21 @@ function fillTournamentModalData (details){
     $('#fseasonstart').val(details[6]);
     $('#fseasonend').val(details[7]);
     $('#fseasonyear').val(details[8]);
+}
+
+//Matches
+function fillTournamentModalData (details){
+    $('#fid').val(details[0]);
+    $('#fscheduled').val(details[1]);
+    $('#ftbd').val(details[2]);
+    $('#fstatus').val(details[3]);
+    $('#fround').val(details[4]);
+    $('#fseasonid').val(details[5]);
+    $('#ftournamentid').val(details[6]);
+    $('#fsportid').val(details[7]);
+    $('#fcategoryid').val(details[8]);
+    $('#fcomphomeid').val(details[9]);
+    $('#fcompawayid').val(details[10]);
 }
 
 //*****END Filleng Models modal data

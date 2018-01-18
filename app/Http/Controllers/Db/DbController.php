@@ -407,6 +407,49 @@ class DbController extends Controller
 
 
 
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function matches()
+    {
+        /*$radarurl = 'https://api.sportradar.us/oddscomparison-rowt1/en/eu/sports.json?api_key=';
+        $request = $radarurl.env('SPORTRADAR_KEY_ODD_ROW');
+
+        $jsondata = file_get_contents($request);
+        $json = json_decode(utf8_decode($jsondata), true);*/
+        $path = storage_path().'\json\schedule.json'; // ie: /var/www/laravel/app/storage/json/filename.json
+        
+        if (!File::exists($path)) {
+            return dd($path);
+        }
+
+        $file = File::get($path); // string
+        $json = json_decode(utf8_decode($file), true);
+
+        for($i = 0; $i < count($json['sport_events']); $i++)
+        {
+            $json['sport_events'][$i]['id'] = filter_var($json['sport_events'][$i]['id'], FILTER_SANITIZE_NUMBER_INT);
+            $json['sport_events'][$i]['season']['id'] = filter_var($json['sport_events'][$i]['season']['id'], FILTER_SANITIZE_NUMBER_INT);
+            $json['sport_events'][$i]['tournament']['id'] = filter_var($json['sport_events'][$i]['tournament']['id'], FILTER_SANITIZE_NUMBER_INT);
+            $json['sport_events'][$i]['tournament']['category']['id'] = filter_var($json['sport_events'][$i]['tournament']['category']['id'], FILTER_SANITIZE_NUMBER_INT);
+            $json['sport_events'][$i]['tournament']['sport']['id'] = filter_var($json['sport_events'][$i]['tournament']['sport']['id'], FILTER_SANITIZE_NUMBER_INT);
+            $json['sport_events'][$i]['competitors'][0]['id'] = filter_var($json['sport_events'][$i]['competitors'][0]['id'], FILTER_SANITIZE_NUMBER_INT);
+            $json['sport_events'][$i]['competitors'][1]['id'] = filter_var($json['sport_events'][$i]['competitors'][1]['id'], FILTER_SANITIZE_NUMBER_INT);
+        }
+        
+        $matches = Match::hydrate($json['sport_events']);
+        //return dd($matches);
+
+        $matchesDb = Match::All();
+
+        $matchesIdDb = $matchesDb->pluck('id');
+
+        $matches = $matches->whereNotIn('id', $matchesIdDb)->whereIn('tournament.id', Tournament::All()->pluck('id'));
+
+        return view('admin.db.matches', ['matchesDb' => $matchesDb, 'matches' => $matches]);
+    }
 
 
     /**

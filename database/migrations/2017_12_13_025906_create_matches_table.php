@@ -16,6 +16,9 @@ class CreateMatchesTable extends Migration
         Schema::create('matches', function (Blueprint $table) {
             $table->increments('id');
             $table->string('scheduled');
+            $table->boolean('start_time_tbd');
+            $table->string('status');
+            $table->string('tournament_round');
             $table->integer('season_id')->unsigned();
             $table->integer('tournament_id')->unsigned();
             $table->integer('sport_id')->unsigned();
