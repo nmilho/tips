@@ -43,7 +43,7 @@
                               <td class="text-center">{{ $match['tournament']['category']['name'] }}</td>
                               <td class="text-center">
                                   <button class="save-modal btn btn-sm btn-success" 
-                                      data-info="">
+                                      data-info="{{ $match['id'] }},{{ $match['tournament']['id'] }},{{ $match['competitors'][0]['id'] }},{{ $match['competitors'][1]['id'] }}">
                                       <i class="fa fa-floppy-o" aria-hidden="true"></i> 
                                       Save
                                   </button>
@@ -136,28 +136,28 @@
             </div>
 
             <div class="form-group">
-              <label class="control-label col-sm-2" for="fscheduled">Scheduled</label>
+              <label class="control-label col-sm-2" for="ftournament">Tournament</label>
               <div class="col-sm-10">
-                <input type="scheduled" class="form-control" id="fscheduled" disabled="" >
+                <input type="tournament" class="form-control" id="ftournament" disabled="" >
               </div>
             </div>
-            <p class="fscheduled_error error text-center alert alert-danger hidden"></p>
+            <p class="ftournament_error error text-center alert alert-danger hidden"></p>
 
             <div class="form-group">
-              <label class="control-label col-sm-2" for="ftbd">To Be Done</label>
+              <label class="control-label col-sm-2" for="fhometeam">Home Team</label>
               <div class="col-sm-10">
-                <input type="tbd" class="form-control" id="ftbd" disabled="" >
+                <input type="team" class="form-control" id="fhometeam" disabled="" >
               </div>
             </div>
-            <p class="ftbd_error error text-center alert alert-danger hidden"></p>
+            <p class="fhometeam_error error text-center alert alert-danger hidden"></p>
 
             <div class="form-group">
-              <label class="control-label col-sm-2" for="ftbd">To Be Done</label>
+              <label class="control-label col-sm-2" for="fawayteam">To Be Done</label>
               <div class="col-sm-10">
-                <input type="tbd" class="form-control" id="ftbd" disabled="" >
+                <input type="team" class="form-control" id="fawayteam" disabled="" >
               </div>
             </div>
-            <p class="ftbd_error error text-center alert alert-danger hidden"></p>
+            <p class="fawayteam_error error text-center alert alert-danger hidden"></p>
 
           </form>
           <div class="deleteContent">
@@ -191,7 +191,7 @@
     $('.deleteContent').hide();
     $('.form-horizontal').show();
     var stuff = $(this).data('info').split(',');
-    fillTournamentModalData(stuff);
+    fillMatchModalData(stuff);
     $('#myModal').modal('show');
   });
 

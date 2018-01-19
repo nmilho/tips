@@ -131,18 +131,11 @@ function fillTournamentModalData (details){
 }
 
 //Matches
-function fillTournamentModalData (details){
+function fillMatchModalData (details){
     $('#fid').val(details[0]);
-    $('#fscheduled').val(details[1]);
-    $('#ftbd').val(details[2]);
-    $('#fstatus').val(details[3]);
-    $('#fround').val(details[4]);
-    $('#fseasonid').val(details[5]);
-    $('#ftournamentid').val(details[6]);
-    $('#fsportid').val(details[7]);
-    $('#fcategoryid').val(details[8]);
-    $('#fcomphomeid').val(details[9]);
-    $('#fcompawayid').val(details[10]);
+    $('#ftournament').val(details[1]);
+    $('#fhometeam').val(details[2]);
+    $('#fawayteam').val(details[3]);
 }
 
 //*****END Filleng Models modal data
