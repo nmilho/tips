@@ -18,6 +18,7 @@
             </div>
             <!-- /.panel-heading -->
             <div class="panel-body">
+                <a href="{{ route('admin.db.bulkupdatecategories') }}" class="btn btn-success"></button>
                 <div class="table">
                     <table id="radarCategories" class="table table-striped table-hover" >
                         <thead>

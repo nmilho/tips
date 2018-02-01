@@ -287,6 +287,50 @@ class DbController extends Controller
      *
      * @return string
      */
+    public function bulkupdatecategories()
+    {
+        $path = storage_path().'\json\CategoriesBySport.sport1.json'; // ie: /var/www/laravel/app/storage/json/filename.json
+        
+        if (!File::exists($path)) {
+            return dd($path);
+        }
+
+        $file = File::get($path); // string
+        $json = json_decode(utf8_decode($file), true);
+
+
+        for($i = 0; $i < count($json['categories']); $i++)
+        {
+            $json['categories'][$i]['id'] = filter_var($json['categories'][$i]['id'], FILTER_SANITIZE_NUMBER_INT);
+            $json['categories'][$i]['sport_id'] = filter_var($json['categories'][$i]['sport_id'], FILTER_SANITIZE_NUMBER_INT);
+        }
+        $categories = Category::hydrate($json['categories']);
+
+        //return dd( $categories->each->name );
+
+        $catres = array();
+
+        $categories->each(function($c) {
+            return dd($c);
+        });
+        
+
+        //$categories->where('id', 4);
+        //$categories->saveorupdate();
+
+        /*$category = new Category;
+        $res = $category->saveCategory( $request );*/
+        return dd( Category::All() );
+
+    }
+
+    /**
+     * Show the application dashboard.
+     *
+     * @param Request $request
+     *
+     * @return string
+     */
     public function deletecategories(Request $request)
     {
 

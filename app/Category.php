@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Category extends Model
 {
-    protected $fillable = ['id', 'name', 'country_code', 'outrights', 'sport_id'];
+    protected $fillable = ['id', 'name', 'outrights', 'sport_id'];
 
     /**
      * Set the id as integer (without the xx:xxxxxx part)

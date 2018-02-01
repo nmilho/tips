@@ -53,6 +53,7 @@ Route::prefix('admin')->group(function() {
   //Route::post('/db/categories', 'Db\DbController@categories')->name('admin.db.categories');
   Route::post('/db/categories/update', 'Db\DbController@updatecategories')->name('admin.db.updatecategories');
   Route::post('/db/categories/delete', 'Db\DbController@deletecategories')->name('admin.db.deletecategories');
+  Route::get('/db/categories/bulkupdate', 'Db\DbController@bulkupdatecategories')->name('admin.db.bulkupdatecategories');
 
   Route::get('/db/tournaments', 'Db\DbController@tournaments')->name('admin.db.tournaments');
   //Route::post('/db/seasons', 'Db\DbController@seasons')->name('admin.db.seasons');

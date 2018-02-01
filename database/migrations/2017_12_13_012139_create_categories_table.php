@@ -16,8 +16,8 @@ class CreateCategoriesTable extends Migration
         Schema::create('categories', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->string('country_code');
-            $table->boolean('outrights');
+            $table->string('country_code')->nullable();
+            $table->boolean('outrights')->nullable()->default(0);
             $table->integer('sport_id')->unsigned();
             $table->timestamps();
             $table->foreign('sport_id')->references('id')->on('sports');
